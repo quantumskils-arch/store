@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHADOW Lite — Free 3-Day Taste</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #06050A;
+  --deep: #0E0B18;
+  --surface: #161222;
+  --border: rgba(139,110,183,0.15);
+  --border-bright: rgba(139,110,183,0.4);
+  --violet: #8B6EB7;
+  --violet-bright: #B89FE0;
+  --violet-glow: rgba(139,110,183,0.12);
+  --gold: #C9A84C;
+  --ash: #9B8FA8;
+  --mist: #C8BDD8;
+  --white: #EDE8F5;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:var(--void);
+  color:var(--mist);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  min-height:100vh;
+}
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:1000; opacity:0.4;
+}
+
+/* COVER */
+#cover {
+  min-height:100vh;
+  background:radial-gradient(ellipse at 50% 30%, #1a0f2e 0%, #0a0714 50%, var(--void) 100%);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:40px 24px; position:relative;
+  overflow:hidden; text-align:center;
+}
+.orb {
+  position:absolute; width:500px; height:500px;
+  background:radial-gradient(circle, rgba(139,110,183,0.07) 0%, transparent 70%);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  animation:pulse 8s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.6;}50%{transform:translate(-50%,-50%) scale(1.2);opacity:1;}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+.c-symbol { font-size:56px; margin-bottom:16px; filter:drop-shadow(0 0 20px rgba(139,110,183,0.5)); animation:float 8s ease-in-out infinite; position:relative; z-index:2; }
+
+.free-badge {
+  display:inline-block;
+  font-family:'Montserrat',sans-serif;
+  font-size:8px; letter-spacing:0.5em;
+  background:rgba(139,110,183,0.2);
+  border:1px solid var(--violet);
+  color:var(--violet-bright);
+  padding:5px 18px; text-transform:uppercase;
+  margin-bottom:18px; position:relative; z-index:2;
+}
+
+.c-eyebrow { font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.6em; color:var(--violet); text-transform:uppercase; margin-bottom:14px; position:relative; z-index:2; }
+
+.c-title { font-family:'Cinzel',serif; font-size:clamp(52px,11vw,88px); color:var(--white); letter-spacing:0.3em; margin-bottom:6px; text-shadow:0 0 60px rgba(139,110,183,0.4); position:relative; z-index:2; font-weight:400; }
+
+.c-sub { font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.5em; color:var(--ash); text-transform:uppercase; margin-bottom:10px; position:relative; z-index:2; }
+
+.c-lite { font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.4em; color:var(--violet); text-transform:uppercase; margin-bottom:36px; position:relative; z-index:2; }
+
+.c-line { width:1px; height:50px; background:linear-gradient(to bottom, var(--violet), transparent); margin:0 auto 36px; position:relative; z-index:2; }
+
+.c-quote { font-family:'Cormorant Garamond',serif; font-size:clamp(15px,2.2vw,19px); color:var(--ash); font-style:italic; line-height:1.8; max-width:440px; margin-bottom:14px; position:relative; z-index:2; }
+
+.c-days { font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.4em; color:rgba(139,110,183,0.5); text-transform:uppercase; margin-bottom:36px; position:relative; z-index:2; }
+
+.name-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; width:100%; max-width:320px; margin-bottom:30px; position:relative; z-index:2; }
+.name-label { font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.5em; color:var(--violet); text-transform:uppercase; }
+.name-input { width:100%; background:transparent; border:none; border-bottom:1px solid var(--border-bright); padding:10px 0; font-family:'Cinzel',serif; font-size:17px; color:var(--white); text-align:center; outline:none; transition:border-color .3s; letter-spacing:0.1em; }
+.name-input:focus { border-bottom-color:var(--violet-bright); }
+.name-input::placeholder { color:rgba(155,143,168,0.3); font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; letter-spacing:0; }
+
+.btn-begin { padding:13px 44px; background:transparent; border:1px solid var(--violet); color:var(--violet-bright); font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.5em; text-transform:uppercase; cursor:pointer; transition:all .4s; position:relative; z-index:2; }
+.btn-begin:hover { background:var(--violet-glow); border-color:var(--violet-bright); color:var(--white); box-shadow:0 0 30px rgba(139,110,183,0.25); }
+
+.c-free { margin-top:16px; font-family:'Cormorant Garamond',serif; font-size:13px; color:rgba(155,143,168,0.3); font-style:italic; position:relative; z-index:2; }
+
+/* APP */
+#app { display:none; }
+
+.app-bar { background:var(--deep); border-bottom:1px solid var(--border); padding:14px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+.bar-title { font-family:'Cinzel',serif; font-size:17px; color:var(--white); letter-spacing:0.2em; }
+.bar-name { font-family:'Montserrat',sans-serif; font-size:7px; letter-spacing:0.35em; color:var(--violet); text-transform:uppercase; margin-top:2px; }
+.bar-day { font-family:'Cinzel',serif; font-size:13px; color:var(--ash); letter-spacing:0.15em; }
+
+.day-tabs { background:var(--deep); border-bottom:1px solid var(--border); display:flex; padding:10px 16px; gap:6px; overflow-x:auto; scrollbar-width:none; }
+.day-tabs::-webkit-scrollbar{display:none;}
+.tab { padding:7px 18px; border:1px solid var(--border); background:transparent; border-radius:2px; font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.2em; color:var(--ash); cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0; text-transform:uppercase; }
+.tab:hover { border-color:var(--violet); color:var(--violet-bright); }
+.tab.active { background:var(--violet-glow); border-color:var(--violet); color:var(--violet-bright); }
+.tab.done { border-color:rgba(201,168,76,0.25); color:rgba(201,168,76,0.5); }
+.tab.locked { opacity:0.3; cursor:default; }
+
+/* PAGE */
+.page { max-width:720px; margin:0 auto; padding:44px 20px 130px; }
+
+.page-top { text-align:center; margin-bottom:40px; padding-bottom:32px; position:relative; }
+.page-top::after { content:''; position:absolute; bottom:0; left:20%; right:20%; height:1px; background:linear-gradient(90deg,transparent,var(--violet),transparent); }
+.day-eyebrow { font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.6em; color:var(--violet); text-transform:uppercase; margin-bottom:12px; }
+.day-sym { font-size:42px; margin-bottom:14px; filter:drop-shadow(0 0 14px rgba(139,110,183,0.5)); }
+.day-theme { font-family:'Cinzel',serif; font-size:clamp(20px,4vw,32px); color:var(--white); letter-spacing:0.1em; margin-bottom:10px; font-weight:400; }
+.day-truth { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--ash); font-style:italic; line-height:1.7; }
+
+.oracle-card { background:linear-gradient(135deg,rgba(139,110,183,0.07),rgba(201,168,76,0.04)); border:1px solid var(--border-bright); padding:24px; margin-bottom:16px; text-align:center; position:relative; }
+.oracle-card::before { content:''; position:absolute; top:7px; left:7px; right:7px; bottom:7px; border:1px solid rgba(139,110,183,0.06); pointer-events:none; }
+.oracle-label { font-family:'Montserrat',sans-serif; font-size:7px; letter-spacing:0.5em; color:var(--gold); text-transform:uppercase; margin-bottom:10px; }
+.oracle-text { font-family:'Cormorant Garamond',serif; font-size:clamp(16px,2.5vw,20px); color:var(--violet-bright); font-style:italic; line-height:1.6; }
+
+.ritual-box { background:rgba(6,5,10,0.8); border:1px solid rgba(201,168,76,0.15); padding:20px; margin-bottom:14px; }
+.ritual-label { font-family:'Montserrat',sans-serif; font-size:7px; letter-spacing:0.5em; color:var(--gold); text-transform:uppercase; margin-bottom:8px; }
+.ritual-text { font-family:'Cormorant Garamond',serif; font-size:15px; color:rgba(201,168,76,0.6); font-style:italic; line-height:1.7; }
+
+.sect { background:var(--surface); border:1px solid var(--border); padding:22px; margin-bottom:12px; position:relative; }
+.sect::before { content:''; position:absolute; top:0; left:0; width:2px; height:100%; background:linear-gradient(to bottom,var(--violet),var(--gold)); }
+.sect-label { font-family:'Montserrat',sans-serif; font-size:7px; letter-spacing:0.45em; color:var(--violet); text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.sect-label::after { content:''; flex:1; height:1px; background:var(--border); }
+.sect-prompt { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--mist); font-style:italic; line-height:1.7; margin-bottom:12px; }
+.jta { width:100%; min-height:90px; background:rgba(6,5,10,0.6); border:none; border-bottom:1px solid var(--border); padding:10px; font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--mist); line-height:1.9; resize:vertical; outline:none; transition:border-color .3s; }
+.jta:focus { border-bottom-color:var(--violet); }
+.jta::placeholder { color:rgba(155,143,168,0.18); font-style:italic; }
+
+/* LOCKED TEASER */
+.locked-wall {
+  background:linear-gradient(135deg, rgba(14,11,24,0.95), rgba(22,18,34,0.98));
+  border:1px solid var(--border-bright);
+  padding:40px 32px;
+  text-align:center;
+  margin-top:28px;
+  position:relative;
+  overflow:hidden;
+}
+.locked-wall::before {
+  content:'🜃';
+  position:absolute;
+  font-size:200px;
+  opacity:0.03;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+}
+.lock-symbol { font-size:40px; margin-bottom:16px; filter:drop-shadow(0 0 20px rgba(139,110,183,0.4)); }
+.lock-heading { font-family:'Cinzel',serif; font-size:clamp(18px,3.5vw,26px); color:var(--white); letter-spacing:0.1em; margin-bottom:12px; font-weight:400; }
+.lock-body { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--ash); font-style:italic; line-height:1.8; margin-bottom:28px; max-width:420px; margin-left:auto; margin-right:auto; }
+.locked-days { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-bottom:28px; }
+.ld-pill { font-family:'Montserrat',sans-serif; font-size:7px; letter-spacing:0.2em; color:rgba(155,143,168,0.35); border:1px solid rgba(139,110,183,0.12); padding:5px 12px; text-transform:uppercase; border-radius:2px; }
+.btn-upgrade { display:inline-block; padding:14px 40px; background:transparent; border:1px solid var(--violet); color:var(--violet-bright); font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.45em; text-transform:uppercase; cursor:pointer; transition:all .3s; text-decoration:none; }
+.btn-upgrade:hover { background:var(--violet-glow); border-color:var(--violet-bright); color:var(--white); box-shadow:0 0 30px rgba(139,110,183,0.2); }
+.price-note { margin-top:12px; font-family:'Cormorant Garamond',serif; font-size:14px; color:rgba(155,143,168,0.4); font-style:italic; }
+.price-note strong { color:var(--gold); }
+
+.complete-card { background:linear-gradient(135deg,rgba(139,110,183,0.08),rgba(201,168,76,0.05)); border:1px solid var(--border-bright); padding:28px; text-align:center; margin-top:24px; }
+.complete-sym { font-size:44px; margin-bottom:12px; }
+.complete-h { font-family:'Cinzel',serif; font-size:clamp(18px,3.5vw,24px); color:var(--white); letter-spacing:0.1em; margin-bottom:10px; font-weight:400; }
+.complete-b { font-family:'Cormorant Garamond',serif; font-size:16px; color:var(--ash); font-style:italic; line-height:1.8; }
+
+/* SAVE BAR */
+.save-bar { position:fixed; bottom:0; left:0; right:0; background:var(--deep); border-top:1px solid var(--border); padding:12px 20px; display:flex; align-items:center; justify-content:space-between; z-index:99; }
+.save-status { font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.3em; color:var(--violet); text-transform:uppercase; }
+.btn-save { padding:9px 24px; background:transparent; border:1px solid var(--violet); color:var(--violet-bright); font-family:'Montserrat',sans-serif; font-size:8px; letter-spacing:0.4em; text-transform:uppercase; cursor:pointer; transition:all .2s; }
+.btn-save:hover { background:var(--violet-glow); color:var(--white); }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover">
+  <div class="orb"></div>
+  <div class="c-symbol">🜃</div>
+  <div class="free-badge">✦ Free 3-Day Taste</div>
+  <div class="c-eyebrow">Shadow Work Journey</div>
+  <div class="c-title">SHADOW</div>
+  <div class="c-sub">A Journal of Sacred Descent</div>
+  <div class="c-lite">Lite · Free Preview</div>
+  <div class="c-line"></div>
+  <p class="c-quote">"Until you make the unconscious conscious, it will direct your life and you will call it fate."</p>
+  <p class="c-days">3 Days · 3 Descents · The Beginning of Everything</p>
+  <div class="name-wrap">
+    <label class="name-label">Who descends</label>
+    <input type="text" id="yourName" class="name-input" placeholder="Your name">
+  </div>
+  <button class="btn-begin" onclick="begin()">◈ Begin The Descent</button>
+  <p class="c-free">No sign up. No email. Completely free.</p>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="app-bar">
+    <div>
+      <div class="bar-title">SHADOW LITE</div>
+      <div class="bar-name" id="barName"></div>
+    </div>
+    <div class="bar-day" id="barDay">Day I</div>
+  </div>
+
+  <div class="day-tabs">
+    <button class="tab active" id="t1" onclick="go(1)">Day I</button>
+    <button class="tab" id="t2" onclick="go(2)">Day II</button>
+    <button class="tab" id="t3" onclick="go(3)">Day III</button>
+    <button class="tab locked">Day IV 🔒</button>
+    <button class="tab locked">Day V 🔒</button>
+    <button class="tab locked">Day VI 🔒</button>
+    <button class="tab locked">• • •</button>
+    <button class="tab locked">Day XXI 🔒</button>
+  </div>
+
+  <div class="page" id="page"></div>
+
+  <div class="save-bar">
+    <span class="save-status" id="saveStatus">◈ Auto-saved</span>
+    <button class="btn-save" onclick="saveDay()">Save Entry</button>
+  </div>
+</div>
+
+<script>
+const DAYS = [
+  { sym:'🌑', theme:'The First Door',
+    truth:'What you resist reveals what you most need to face.',
+    oracle:'The shadow is not your enemy. It is the part of you that has been waiting the longest.',
+    ritual:'Light a candle. Sit in the dark for two minutes before writing.',
+    prompt:'What emotion do you work hardest to hide from others — and from yourself? Describe it without judgement.',
+    deeper:'Where in your body do you feel this emotion living right now? Describe the physical sensation.',
+    release:'Tonight, breathe into that place in your body three times. You do not need to fix it. Just witness it.' },
+  { sym:'🌑', theme:'The Mask',
+    truth:'The face we show the world is built from the wounds we survived.',
+    oracle:'Every mask was made to protect something real and tender beneath it.',
+    ritual:'Before you write, say out loud: "I am safe to be honest here."',
+    prompt:'What version of yourself do you perform for others? Who were you performing it for originally?',
+    deeper:'When did you first learn it was safer to be this version than your actual self?',
+    release:'Write the name of the person or situation that first required you to wear this mask.' },
+  { sym:'🌒', theme:'Inherited Darkness',
+    truth:'Some of what we carry was never ours to begin with.',
+    oracle:'You are not your mother\'s wounds. You are not your father\'s silence. You are the one who chose to look.',
+    ritual:'Think of one ancestor who also carried this. Send them compassion before you begin.',
+    prompt:'What patterns do you see in yourself that you also recognise in your family? Name them plainly.',
+    deeper:'Which of these patterns has caused you the most pain in your own life?',
+    release:'Write: "I received this. I am grateful for what it protected. I am ready to return what is not mine."' }
+];
+
+const ROMAN = ['I','II','III'];
+let current = 1, name = '', data = {};
+
+function begin() {
+  name = document.getElementById('yourName').value.trim() || 'Brave Soul';
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('barName').textContent = name + "'s Descent";
+  const saved = localStorage.getItem('shadow_lite');
+  if(saved) data = JSON.parse(saved);
+  go(1);
+}
+
+function go(n) {
+  if(n > 3) return;
+  current = n;
+  document.getElementById('barDay').textContent = 'Day ' + ROMAN[n-1];
+  [1,2,3].forEach(i => {
+    const t = document.getElementById('t'+i);
+    if(t) { t.className='tab'; if(i===n) t.classList.add('active'); else if(data['d'+i]) t.classList.add('done'); }
+  });
+  renderPage(n);
+  window.scrollTo(0,0);
+}
+
+function renderPage(n) {
+  const d = DAYS[n-1], s = data['d'+n]||{};
+  const first = name.split(' ')[0];
+
+  let next = '';
+  if(n < 3) {
+    next = `<div style="text-align:center;margin-top:32px"><button class="btn-begin" onclick="go(${n+1})" style="font-size:8px">Continue to Day ${ROMAN[n]} →</button></div>`;
+  } else {
+    next = buildUpgrade(first);
+  }
+
+  document.getElementById('page').innerHTML = `
+    <div class="page-top">
+      <div class="day-eyebrow">Day ${ROMAN[n-1]} of III — Free Preview</div>
+      <div class="day-sym">${d.sym}</div>
+      <div class="day-theme">${d.theme}</div>
+      <div class="day-truth">"${d.truth}"</div>
+    </div>
+
+    <div class="oracle-card">
+      <div class="oracle-label">◈ The Oracle Speaks</div>
+      <div class="oracle-text">${d.oracle}</div>
+    </div>
+
+    <div class="ritual-box">
+      <div class="ritual-label">🕯 Before You Begin</div>
+      <div class="ritual-text">${d.ritual}</div>
+    </div>
+
+    <div class="sect">
+      <div class="sect-label">🜃 The Descent</div>
+      <div class="sect-prompt">${d.prompt}</div>
+      <textarea class="jta" id="primary" rows="5" placeholder="Begin here. The darkness is safe...">${s.primary||''}</textarea>
+    </div>
+
+    <div class="sect">
+      <div class="sect-label">🜁 Going Deeper</div>
+      <div class="sect-prompt">${d.deeper}</div>
+      <textarea class="jta" id="deeper" rows="4" placeholder="Go further...">${s.deeper||''}</textarea>
+    </div>
+
+    <div class="sect">
+      <div class="sect-label">🜂 The Release</div>
+      <div class="sect-prompt">${d.release}</div>
+      <textarea class="jta" id="release" rows="3" placeholder="Write it and let it go...">${s.release||''}</textarea>
+    </div>
+
+    ${next}
+  `;
+}
+
+function buildUpgrade(first) {
+  return `
+    <div class="complete-card">
+      <div class="complete-sym">🜃</div>
+      <div class="complete-h">Three days in the dark, ${first}.</div>
+      <div class="complete-b">Most people never go this far.<br>You did. And you are only at the beginning.</div>
+    </div>
+
+    <div class="locked-wall">
+      <div class="lock-symbol">🌑</div>
+      <div class="lock-heading">18 More Days Are Waiting</div>
+      <div class="lock-body">The full SHADOW journey continues through 18 more days of deep inner work — Shame, Betrayal, The Inner Critic, Self-Sabotage, The Body's Memory, and the final Emergence into light. Each day unlocked. Each entry saved. Yours forever.</div>
+      <div class="locked-days">
+        ${['IV','V','VI','VII','VIII','IX','X','XII','XV','XVIII','XXI'].map(r=>'<div class="ld-pill">Day '+r+' 🔒</div>').join('')}
+        <div class="ld-pill">+ 7 more 🔒</div>
+      </div>
+      <a class="btn-upgrade" href="https://selar.com/z887313ya8" target="_blank">◈ Get The Full 21-Day Journey</a>
+      <p class="price-note">Full SHADOW Journal — <strong>UGX 45,000</strong> (~$12) · Yours forever · No subscription</p>
+    </div>
+  `;
+}
+
+function saveDay() {
+  if(!data['d'+current]) data['d'+current]={};
+  const d = data['d'+current];
+  d.primary = document.getElementById('primary')?.value||'';
+  d.deeper = document.getElementById('deeper')?.value||'';
+  d.release = document.getElementById('release')?.value||'';
+  autoSave();
+  document.getElementById('saveStatus').textContent = '✓ Saved';
+  document.getElementById('t'+current)?.classList.add('done');
+  setTimeout(()=>document.getElementById('saveStatus').textContent='◈ Auto-saved',2000);
+}
+function autoSave() { localStorage.setItem('shadow_lite',JSON.stringify(data)); }
+document.addEventListener('input', e => {
+  if(['primary','deeper','release'].includes(e.target.id)) {
+    clearTimeout(window._t); window._t = setTimeout(saveDay,1500);
+  }
+});
+</script>
+</body>
+</html>
