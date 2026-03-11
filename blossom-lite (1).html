@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blossom Lite — 3-Day Self-Care Taste</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blush: #F2D4C8;
+  --rose: #D4856A;
+  --rose-deep: #B85C42;
+  --cream: #FBF5EE;
+  --warm: #F5EBE0;
+  --sage: #8FAF8A;
+  --sage-light: #C4D9C0;
+  --gold: #C9A458;
+  --ink: #2C1F1A;
+  --ink-soft: #5C4033;
+  --mist: #E8DDD5;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  min-height: 100vh;
+}
+
+/* COVER */
+#cover {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #FBF5EE 0%, #F2D4C8 45%, #E8C5B5 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+#cover::before {
+  content:'';
+  position:absolute;
+  top:-80px; right:-80px;
+  width:400px; height:400px;
+  background:radial-gradient(circle, rgba(201,164,88,0.1) 0%, transparent 70%);
+}
+#cover::after {
+  content:'';
+  position:absolute;
+  bottom:-60px; left:-60px;
+  width:350px; height:350px;
+  background:radial-gradient(circle, rgba(143,175,138,0.12) 0%, transparent 70%);
+}
+
+.cover-bloom { font-size:72px; margin-bottom:16px; animation:float 6s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+.cover-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(48px,9vw,72px);
+  color:var(--rose-deep);
+  font-style:italic;
+  margin-bottom:4px;
+}
+.cover-sub {
+  font-family:'Montserrat',sans-serif;
+  font-size:10px;
+  letter-spacing:0.45em;
+  color:var(--rose);
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+.lite-badge {
+  display:inline-block;
+  background:var(--sage);
+  color:white;
+  font-family:'Montserrat',sans-serif;
+  font-size:9px;
+  letter-spacing:0.3em;
+  padding:4px 14px;
+  text-transform:uppercase;
+  margin-bottom:30px;
+}
+.cover-line {
+  width:100px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--rose),transparent);
+  margin:0 auto 28px;
+}
+.cover-quote {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(15px,2.2vw,19px);
+  color:var(--ink-soft);
+  font-style:italic;
+  max-width:420px;
+  line-height:1.7;
+  margin-bottom:14px;
+}
+.cover-days {
+  font-family:'Montserrat',sans-serif;
+  font-size:10px;
+  letter-spacing:0.3em;
+  color:var(--rose);
+  text-transform:uppercase;
+  margin-bottom:36px;
+}
+
+.name-wrap {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  max-width:320px;
+  margin-bottom:32px;
+}
+.name-label {
+  font-family:'Montserrat',sans-serif;
+  font-size:9px;
+  letter-spacing:0.4em;
+  color:var(--rose);
+  text-transform:uppercase;
+}
+.name-input {
+  width:100%;
+  background:rgba(255,255,255,0.5);
+  border:none;
+  border-bottom:1px solid rgba(212,133,106,0.4);
+  padding:10px 0;
+  font-family:'Playfair Display',serif;
+  font-size:20px;
+  color:var(--ink);
+  text-align:center;
+  outline:none;
+  transition:border-color .3s;
+}
+.name-input:focus { border-bottom-color:var(--rose); }
+.name-input::placeholder { color:rgba(92,64,51,0.3); }
+
+.btn-begin {
+  padding:15px 44px;
+  background:var(--rose-deep);
+  color:var(--cream);
+  border:none;
+  font-family:'Montserrat',sans-serif;
+  font-size:10px;
+  letter-spacing:0.4em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all .3s;
+  position:relative;
+}
+.btn-begin::after {
+  content:'';
+  position:absolute;
+  inset:3px;
+  border:1px solid rgba(255,255,255,0.2);
+  pointer-events:none;
+}
+.btn-begin:hover {
+  background:var(--rose);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(184,92,66,0.3);
+}
+.cover-free {
+  margin-top:16px;
+  font-family:'Montserrat',sans-serif;
+  font-size:10px;
+  color:var(--ink-soft);
+  letter-spacing:0.15em;
+}
+.cover-free span { color:var(--sage); font-weight:500; }
+
+/* APP */
+#app { display:none; }
+
+.app-bar {
+  background:linear-gradient(135deg,var(--rose-deep),var(--rose));
+  padding:16px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0; z-index:100;
+  box-shadow:0 4px 20px rgba(184,92,66,0.2);
+}
+.bar-title {
+  font-family:'Playfair Display',serif;
+  font-size:20px;
+  color:var(--cream);
+  font-style:italic;
+}
+.bar-name {
+  font-family:'Montserrat',sans-serif;
+  font-size:8px;
+  letter-spacing:0.3em;
+  color:rgba(251,245,238,0.6);
+  text-transform:uppercase;
+  margin-top:2px;
+}
+.bar-day {
+  font-family:'Playfair Display',serif;
+  font-size:15px;
+  color:var(--cream);
+}
+
+/* DAY TABS */
+.day-tabs {
+  background:var(--warm);
+  border-bottom:1px solid var(--mist);
+  display:flex;
+  padding:12px 20px;
+  gap:10px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.day-tab {
+  padding:9px 22px;
+  border:1px solid var(--mist);
+  background:white;
+  border-radius:30px;
+  font-family:'Montserrat',sans-serif;
+  font-size:10px;
+  letter-spacing:0.1em;
+  color:var(--ink-soft);
+  cursor:pointer;
+  transition:all .2s;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.day-tab:hover { border-color:var(--rose); color:var(--rose); }
+.day-tab.active { background:var(--rose-deep); border-color:var(--rose-deep); color:white; }
+.day-tab.done { background:var(--sage-light); border-color:var(--sage); color:var(--sage); }
+.day-tab.locked {
+  opacity:0.4; cursor:default;
+  background:var(--mist);
+}
+
+/* PAGE */
+.page {
+  max-width:720px;
+  margin:0 auto;
+  padding:36px 20px 140px;
+}
+
+.page-top {
+  text-align:center;
+  margin-bottom:36px;
+  padding-bottom:28px;
+  position:relative;
+}
+.page-top::after {
+  content:'';
+  position:absolute;
+  bottom:0; left:25%; right:25%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--rose),transparent);
+}
+.day-eyebrow {
+  font-family:'Montserrat',sans-serif;
+  font-size:9px;
+  letter-spacing:0.5em;
+  color:var(--rose);
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.day-theme {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(24px,5vw,36px);
+  color:var(--ink);
+  font-style:italic;
+  margin-bottom:6px;
+  line-height:1.2;
+}
+.day-intention {
+  font-size:16px;
+  color:var(--ink-soft);
+  font-style:italic;
+  line-height:1.6;
+}
+
+/* AFFIRMATION */
+.affirmation {
+  background:linear-gradient(135deg,rgba(242,212,200,0.4),rgba(196,217,192,0.3));
+  border:1px solid var(--blush);
+  padding:22px;
+  text-align:center;
+  margin-bottom:18px;
+}
+.aff-label {
+  font-family:'Montserrat',sans-serif;
+  font-size:9px;
+  letter-spacing:0.4em;
+  color:var(--rose);
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.aff-text {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(17px,2.5vw,22px);
+  color:var(--rose-deep);
+  font-style:italic;
+  line-height:1.5;
+}
+
+/* SECTION */
+.sect {
+  background:white;
+  border:1px solid var(--mist);
+  padding:24px;
+  margin-bottom:16px;
+  position:relative;
+}
+.sect::before {
+  content:'';
+  position:absolute;
+  top:0; left:0;
+  width:3px; height:100%;
+  background:linear-gradient(to bottom,var(--rose),var(--sage));
+}
+.sect-label {
+  font-family:'Montserrat',sans-serif;
+  font-size:9px;
+  letter-spacing:0.4em;
+  color:var(--rose);
+  text-transform:uppercase;
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.sect-label::after { content:''; flex:1; height:1px; background:var(--mist); }
+.sect-prompt {
+  font-family:'Playfair Display',serif;
+  font-size:17px;
+  color:var(--ink);
+  font-style:italic;
+  line-height:1.6;
+  margin-bottom:12px;
+}
+.jta {
+  width:100%;
+  min-height:90px;
+  background:var(--cream);
+  border:none;
+  border-bottom:1px solid var(--mist);
+  padding:10px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;
+  color:var(--ink);
+  line-height:1.8;
+  resize:vertical;
+  outline:none;
+  transition:border-color .3s;
+}
+.jta:focus { border-bottom-color:var(--rose); }
+.jta::placeholder { color:rgba(92,64,51,0.25); font-style:italic; }
+
+/* MOOD */
+.mood-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+.mood-btn {
+  padding:7px 14px;
+  border:1px solid var(--mist);
+  background:var(--cream);
+  border-radius:30px;
+  font-size:13px;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:'Cormorant Garamond',serif;
+  color:var(--ink-soft);
+}
+.mood-btn:hover { border-color:var(--rose); }
+.mood-btn.sel { background:var(--rose-deep); border-color:var(--rose-deep); color:white; }
+
+/* GRATITUDE */
+.grat-list { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+.grat-row { display:flex; align-items:center; gap:10px; }
+.grat-num {
+  font-family:'Playfair Display',serif;
+  font-size:20px;
+  color:var(--rose);
+  min-width:22px;
+  font-style:italic;
+}
+.grat-in {
+  flex:1;
+  background:none;
+  border:none;
+  border-bottom:1px solid var(--mist);
+  padding:7px 0;
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;
+  color:var(--ink);
+  outline:none;
+  transition:border-color .3s;
+}
+.grat-in:focus { border-bottom-color:var(--rose); }
+.grat-in::placeholder { color:rgba(92,64,51,0.25); font-style:italic; }
+
+/* LOCKED DAYS TEASER */
+.locked-teaser {
+  background:white;
+  border:1px solid var(--mist);
+  padding:32px 28px;
+  text-align:center;
+  margin-top:24px;
+  position:relative;
+  overflow:hidden;
+}
+.locked-teaser::before {
+  content:'🌸';
+  position:absolute;
+  top:-20px; right:-20px;
+  font-size:80px;
+  opacity:0.08;
+}
+.locked-heading {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(20px,4vw,28px);
+  color:var(--rose-deep);
+  font-style:italic;
+  margin-bottom:10px;
+}
+.locked-body {
+  font-size:16px;
+  color:var(--ink-soft);
+  line-height:1.7;
+  margin-bottom:24px;
+  max-width:400px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.locked-days {
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:24px;
+}
+.locked-day-pill {
+  padding:8px 16px;
+  border:1px solid var(--mist);
+  border-radius:30px;
+  font-family:'Montserrat',sans-serif;
+  font-size:9px;
+  letter-spacing:0.2em;
+  color:var(--ink-soft);
+  background:var(--warm);
+  opacity:0.6;
+}
+.btn-upgrade {
+  display:inline-block;
+  padding:15px 40px;
+  background:var(--rose-deep);
+  color:white;
+  text-decoration:none;
+  font-family:'Montserrat',sans-serif;
+  font-size:10px;
+  letter-spacing:0.4em;
+  text-transform:uppercase;
+  cursor:pointer;
+  border:none;
+  transition:all .3s;
+  position:relative;
+}
+.btn-upgrade::after {
+  content:'';
+  position:absolute;
+  inset:3px;
+  border:1px solid rgba(255,255,255,0.2);
+  pointer-events:none;
+}
+.btn-upgrade:hover {
+  background:var(--rose);
+  box-shadow:0 8px 24px rgba(184,92,66,0.3);
+  transform:translateY(-2px);
+}
+.price-note {
+  margin-top:12px;
+  font-family:'Montserrat',sans-serif;
+  font-size:10px;
+  color:var(--ink-soft);
+  letter-spacing:0.1em;
+}
+.price-note strong { color:var(--rose-deep); }
+
+/* SAVE BAR */
+.save-bar {
+  position:fixed;
+  bottom:0; left:0; right:0;
+  background:white;
+  border-top:1px solid var(--mist);
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  z-index:99;
+  box-shadow:0 -4px 16px rgba(0,0,0,0.06);
+}
+.save-status {
+  font-family:'Montserrat',sans-serif;
+  font-size:10px;
+  letter-spacing:0.2em;
+  color:var(--sage);
+  text-transform:uppercase;
+}
+.btn-save {
+  padding:11px 28px;
+  background:var(--rose-deep);
+  color:white;
+  border:none;
+  font-family:'Montserrat',sans-serif;
+  font-size:10px;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all .2s;
+}
+.btn-save:hover { background:var(--rose); }
+
+/* COMPLETE MESSAGE */
+.complete-box {
+  background:linear-gradient(135deg,rgba(242,212,200,0.5),rgba(196,217,192,0.4));
+  border:1px solid var(--blush);
+  padding:30px;
+  text-align:center;
+  margin-top:24px;
+}
+.complete-emoji { font-size:48px; margin-bottom:12px; }
+.complete-heading {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(22px,4vw,30px);
+  color:var(--rose-deep);
+  font-style:italic;
+  margin-bottom:10px;
+}
+.complete-body {
+  font-size:16px;
+  color:var(--ink-soft);
+  line-height:1.7;
+  margin-bottom:24px;
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover">
+  <div class="cover-bloom">🌸</div>
+  <div class="cover-title">Blossom</div>
+  <div class="cover-sub">Self-Care Journey</div>
+  <div class="lite-badge">✦ Free 3-Day Taste</div>
+  <div class="cover-line"></div>
+  <p class="cover-quote">"You cannot pour from an empty vessel. This is your first refill."</p>
+  <p class="cover-days">3 Days · 3 Reflections · 1 Beautiful Beginning</p>
+  <div class="name-wrap">
+    <label class="name-label">This journey belongs to</label>
+    <input type="text" id="yourName" class="name-input" placeholder="Your name">
+  </div>
+  <button class="btn-begin" onclick="begin()">Begin My 3 Days</button>
+  <p class="cover-free">Completely <span>free</span> — no sign up, no email required.</p>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="app-bar">
+    <div>
+      <div class="bar-title">🌸 Blossom Lite</div>
+      <div class="bar-name" id="barName"></div>
+    </div>
+    <div class="bar-day" id="barDay">Day 1</div>
+  </div>
+
+  <div class="day-tabs">
+    <button class="day-tab active" id="tab1" onclick="goTo(1)">Day 1</button>
+    <button class="day-tab" id="tab2" onclick="goTo(2)">Day 2</button>
+    <button class="day-tab" id="tab3" onclick="goTo(3)">Day 3</button>
+    <button class="day-tab locked" id="tab4">Day 4 🔒</button>
+    <button class="day-tab locked">Day 5 🔒</button>
+    <button class="day-tab locked">Day 6 🔒</button>
+    <button class="day-tab locked">• • •</button>
+    <button class="day-tab locked">Day 30 🔒</button>
+  </div>
+
+  <div class="page" id="page"></div>
+
+  <div class="save-bar">
+    <span class="save-status" id="saveStatus">● Auto-saved</span>
+    <button class="btn-save" onclick="saveDay()">Save Day</button>
+  </div>
+</div>
+
+<script>
+const DAYS = [
+  {
+    n:1, theme:"First Breath",
+    intention:"Today I choose myself.",
+    affirmation:"I am worthy of the care I give to others.",
+    prompt:"What brought you here today? What do you need most right now — be completely honest.",
+    evening:"What was one small moment today that felt like kindness toward yourself?"
+  },
+  {
+    n:2, theme:"Rooted",
+    intention:"I am safe in my own body.",
+    affirmation:"My body is my home and I treat it with tenderness.",
+    prompt:"Describe one place — real or imagined — where you feel completely safe and at peace.",
+    evening:"What is one thing your body did today that you can thank it for?"
+  },
+  {
+    n:3, theme:"Gentle Truths",
+    intention:"Honesty with myself is an act of love.",
+    affirmation:"I welcome my own truth without judgement.",
+    prompt:"What have you been avoiding thinking about? Write it down gently — just to look at it with compassion.",
+    evening:"After 3 days, what one word describes how you feel right now compared to Day 1?"
+  }
+];
+
+const moods = ['🌧 Heavy','🌥 Cloudy','⛅ Mixed','🌤 Brightening','☀️ Radiant'];
+let current = 1;
+let name = '';
+let data = {};
+
+function begin() {
+  name = document.getElementById('yourName').value.trim() || 'Beautiful Soul';
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('barName').textContent = name + "'s Journey";
+  const saved = localStorage.getItem('blossom_lite');
+  if(saved) data = JSON.parse(saved);
+  goTo(1);
+}
+
+function goTo(n) {
+  if(n > 3) return;
+  current = n;
+  document.getElementById('barDay').textContent = 'Day ' + n;
+  [1,2,3].forEach(i => {
+    const t = document.getElementById('tab'+i);
+    if(t) {
+      t.className = 'day-tab';
+      if(i === n) t.classList.add('active');
+      else if(data['d'+i]) t.classList.add('done');
+    }
+  });
+  renderPage(n);
+  window.scrollTo(0,0);
+}
+
+function renderPage(n) {
+  const d = DAYS[n-1];
+  const s = data['d'+n] || {};
+  const moodHtml = moods.map(m =>
+    '<button class="mood-btn' + (s.mood===m?' sel':'') + '" onclick="setMood(this,\'' + m + '\')">' + m + '</button>'
+  ).join('');
+
+  let next = '';
+  if(n < 3) {
+    next = '<div style="text-align:center;margin-top:28px"><button class="btn-begin" style="font-size:10px;background:var(--sage)" onclick="goTo('+(n+1)+')">Continue to Day '+(n+1)+' →</button></div>';
+  } else {
+    next = renderUpgrade();
+  }
+
+  document.getElementById('page').innerHTML = `
+    <div class="page-top">
+      <div class="day-eyebrow">Day ${n} of 3 — Free Preview</div>
+      <div class="day-theme">${d.theme}</div>
+      <div class="day-intention">"${d.intention}"</div>
+    </div>
+
+    <div class="affirmation">
+      <div class="aff-label">🌷 Today's Affirmation</div>
+      <div class="aff-text">${d.affirmation}</div>
+    </div>
+
+    <div class="sect">
+      <div class="sect-label">🌤 Morning — How Are You Arriving?</div>
+      <div class="mood-row">${moodHtml}</div>
+      <textarea class="jta" id="morning" style="margin-top:12px" placeholder="I am arriving as...">${s.morning||''}</textarea>
+    </div>
+
+    <div class="sect">
+      <div class="sect-label">✍️ Today's Reflection</div>
+      <div class="sect-prompt">${d.prompt}</div>
+      <textarea class="jta" id="reflection" rows="5" placeholder="Begin here...">${s.reflection||''}</textarea>
+    </div>
+
+    <div class="sect">
+      <div class="sect-label">🌹 3 Things I'm Grateful For</div>
+      <div class="grat-list">
+        ${[1,2,3].map(i => `<div class="grat-row"><span class="grat-num">${i}.</span><input type="text" class="grat-in" id="g${i}" placeholder="I am grateful for..." value="${s['g'+i]||''}"></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="sect">
+      <div class="sect-label">🌙 Evening Note</div>
+      <div class="sect-prompt">${d.evening}</div>
+      <textarea class="jta" id="evening" placeholder="Tonight I notice...">${s.evening||''}</textarea>
+    </div>
+
+    ${next}
+  `;
+}
+
+function renderUpgrade() {
+  const firstName = name.split(' ')[0];
+  return `
+    <div class="complete-box">
+      <div class="complete-emoji">🌸</div>
+      <div class="complete-heading">You showed up 3 days in a row, ${firstName}.</div>
+      <div class="complete-body">That is not small. That is the beginning of something real.<br><br>The full <strong>Blossom</strong> journey continues for 27 more days — each one with a new theme, new reflection, new affirmation, and a self-care checklist built just for that day.</div>
+    </div>
+
+    <div class="locked-teaser">
+      <div class="locked-heading">27 More Days Are Waiting For You</div>
+      <div class="locked-body">Each day unlocked and ready. Your entries save automatically. Yours to keep forever.</div>
+      <div class="locked-days">
+        ${[4,5,6,7,8,9,10,14,20,25,30].map(n => '<div class="locked-day-pill">Day '+n+' 🔒</div>').join('')}
+        <div class="locked-day-pill">+ 16 more 🔒</div>
+      </div>
+      <a class="btn-upgrade" href="https://selar.com" target="_blank">🌸 Get the Full 30-Day Journey</a>
+      <p class="price-note">Full Blossom Journal — <strong>UGX 40,000</strong> (~$11) · Yours forever · No subscription</p>
+    </div>
+  `;
+}
+
+function setMood(btn, mood) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  if(!data['d'+current]) data['d'+current]={};
+  data['d'+current].mood = mood;
+  autoSave();
+}
+
+function saveDay() {
+  if(!data['d'+current]) data['d'+current]={};
+  const d = data['d'+current];
+  d.morning = document.getElementById('morning')?.value||'';
+  d.reflection = document.getElementById('reflection')?.value||'';
+  d.evening = document.getElementById('evening')?.value||'';
+  d.g1 = document.getElementById('g1')?.value||'';
+  d.g2 = document.getElementById('g2')?.value||'';
+  d.g3 = document.getElementById('g3')?.value||'';
+  autoSave();
+  document.getElementById('saveStatus').textContent = '✓ Saved';
+  document.getElementById('tab'+current)?.classList.add('done');
+  setTimeout(()=> document.getElementById('saveStatus').textContent = '● Auto-saved', 2000);
+}
+
+function autoSave() {
+  localStorage.setItem('blossom_lite', JSON.stringify(data));
+}
+
+document.addEventListener('input', e => {
+  if(['morning','reflection','evening','g1','g2','g3'].includes(e.target.id)) {
+    clearTimeout(window._t);
+    window._t = setTimeout(saveDay, 1500);
+  }
+});
+</script>
+</body>
+</html>

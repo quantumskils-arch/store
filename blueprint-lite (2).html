@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blueprint Lite — Discover Your Life Path</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --void: #07050F;
+    --deep: #0D0B18;
+    --text: #E8DFC8;
+    --text-dim: #9B8E72;
+    --cyan: #4ECDC4;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+  }
+
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background: radial-gradient(ellipse at 50% 20%, rgba(201,168,76,0.07) 0%, transparent 65%);
+    pointer-events:none;
+  }
+
+  /* SCREEN MANAGEMENT */
+  .screen { display:none; width:100%; max-width:480px; }
+  .screen.active { display:flex; flex-direction:column; align-items:center; }
+
+  /* ── SCREEN 1: ENTRY ── */
+  .logo {
+    font-family:'Cinzel',serif;
+    font-size:11px;
+    letter-spacing:0.5em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    margin-bottom:30px;
+    text-align:center;
+  }
+
+  .spinner {
+    width:120px; height:120px;
+    margin-bottom:35px;
+    animation: spin 40s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  h1 {
+    font-family:'Cinzel',serif;
+    font-size:clamp(20px,5vw,28px);
+    color:var(--gold);
+    text-align:center;
+    letter-spacing:0.08em;
+    margin-bottom:8px;
+  }
+
+  .tagline {
+    font-size:16px;
+    color:var(--text-dim);
+    text-align:center;
+    font-style:italic;
+    margin-bottom:40px;
+    line-height:1.6;
+  }
+
+  .card {
+    width:100%;
+    background: linear-gradient(145deg,rgba(20,16,32,0.95),rgba(8,6,14,0.98));
+    border:1px solid rgba(201,168,76,0.18);
+    padding:36px 30px;
+    position:relative;
+  }
+  .card::before {
+    content:'';
+    position:absolute;
+    top:-1px; left:15%; right:15%;
+    height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  }
+
+  .field-label {
+    font-family:'Cinzel',serif;
+    font-size:9px;
+    letter-spacing:0.35em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    margin-bottom:9px;
+    display:block;
+  }
+
+  input[type=text] {
+    width:100%;
+    background:rgba(201,168,76,0.05);
+    border:1px solid rgba(201,168,76,0.2);
+    padding:13px 16px;
+    color:var(--text);
+    font-family:'EB Garamond',serif;
+    font-size:18px;
+    outline:none;
+    margin-bottom:22px;
+    transition:border-color .3s;
+  }
+  input[type=text]:focus { border-color:rgba(201,168,76,0.55); }
+  input[type=text]::placeholder { color:rgba(155,142,114,0.35); }
+
+  .dob-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:28px; }
+  .dob-row select {
+    background:rgba(201,168,76,0.05);
+    border:1px solid rgba(201,168,76,0.2);
+    padding:13px 6px;
+    color:var(--text);
+    font-family:'EB Garamond',serif;
+    font-size:15px;
+    outline:none;
+    cursor:pointer;
+    text-align:center;
+    appearance:none;
+    -webkit-appearance:none;
+  }
+  .dob-row select option { background:var(--deep); }
+
+  .btn-main {
+    width:100%;
+    padding:16px;
+    background:linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.08));
+    border:1px solid rgba(201,168,76,0.5);
+    color:var(--gold-light);
+    font-family:'Cinzel',serif;
+    font-size:11px;
+    letter-spacing:0.4em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:all .35s;
+  }
+  .btn-main:hover {
+    background:rgba(201,168,76,0.28);
+    box-shadow:0 0 24px rgba(201,168,76,0.18);
+  }
+
+  .free-badge {
+    text-align:center;
+    margin-top:16px;
+    font-size:13px;
+    color:var(--text-dim);
+    font-style:italic;
+  }
+  .free-badge span { color:var(--cyan); font-style:normal; }
+
+  /* ── SCREEN 2: LOADING ── */
+  #loading { gap:20px; }
+  .loading-ring {
+    width:90px; height:90px;
+    border:1px solid rgba(201,168,76,0.15);
+    border-top:1px solid var(--gold);
+    border-radius:50%;
+    animation:spin 1.2s linear infinite;
+  }
+  .loading-text {
+    font-family:'Cinzel',serif;
+    font-size:10px;
+    letter-spacing:0.4em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+  /* ── SCREEN 3: RESULT ── */
+  #result { gap:0; }
+
+  .result-top {
+    text-align:center;
+    padding:30px 20px 25px;
+    width:100%;
+    position:relative;
+  }
+  .result-top::after {
+    content:'';
+    position:absolute;
+    bottom:0; left:15%; right:15%;
+    height:1px;
+    background:linear-gradient(90deg,transparent,rgba(201,168,76,0.3),transparent);
+  }
+
+  .result-brand {
+    font-family:'Cinzel',serif;
+    font-size:9px;
+    letter-spacing:0.5em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    margin-bottom:16px;
+  }
+
+  .result-name {
+    font-family:'Cinzel',serif;
+    font-size:clamp(16px,4vw,22px);
+    color:var(--text);
+    margin-bottom:4px;
+  }
+
+  .result-dob {
+    font-size:14px;
+    color:var(--text-dim);
+    font-style:italic;
+    margin-bottom:24px;
+  }
+
+  .number-reveal {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    margin-bottom:16px;
+  }
+
+  .number-label-sm {
+    font-family:'Cinzel',serif;
+    font-size:9px;
+    letter-spacing:0.4em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+  }
+
+  .big-number {
+    font-family:'Cinzel',serif;
+    font-size:88px;
+    color:var(--gold);
+    line-height:1;
+    text-shadow:0 0 60px rgba(201,168,76,0.35);
+    animation:emerge 1s ease-out forwards;
+  }
+  @keyframes emerge {
+    from { opacity:0; transform:scale(0.7); }
+    to   { opacity:1; transform:scale(1); }
+  }
+
+  .number-title {
+    font-family:'Cinzel',serif;
+    font-size:14px;
+    letter-spacing:0.25em;
+    color:var(--gold-light);
+    text-transform:uppercase;
+  }
+
+  .geo-mini {
+    width:100px; height:100px;
+    margin:10px auto;
+    animation:pulse-glow 4s ease-in-out infinite;
+  }
+  @keyframes pulse-glow {
+    0%,100%{filter:drop-shadow(0 0 8px rgba(201,168,76,.25))}
+    50%{filter:drop-shadow(0 0 20px rgba(201,168,76,.5))}
+  }
+
+  /* TEASER SECTION */
+  .teaser-block {
+    width:100%;
+    padding:28px 28px 0;
+  }
+
+  .teaser-heading {
+    font-family:'Cinzel',serif;
+    font-size:9px;
+    letter-spacing:0.4em;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-bottom:14px;
+    text-align:center;
+  }
+
+  .teaser-text {
+    font-size:clamp(15px,1.8vw,17px);
+    line-height:1.85;
+    color:var(--text);
+    text-align:center;
+    margin-bottom:20px;
+  }
+
+  /* LOCKED SECTIONS */
+  .locked-section {
+    width:100%;
+    padding:0 28px;
+    margin-top:20px;
+  }
+
+  .locked-row {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 0;
+    border-bottom:1px solid rgba(201,168,76,0.08);
+    opacity:0.5;
+  }
+
+  .locked-row-label {
+    font-family:'Cinzel',serif;
+    font-size:10px;
+    letter-spacing:0.2em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+  }
+
+  .lock-icon {
+    font-size:14px;
+    color:rgba(201,168,76,0.4);
+  }
+
+  .locked-note {
+    font-size:13px;
+    color:var(--text-dim);
+    font-style:italic;
+    text-align:center;
+    padding:20px 28px 0;
+    line-height:1.7;
+  }
+
+  /* CTA */
+  .cta-block {
+    width:100%;
+    padding:28px;
+    text-align:center;
+  }
+
+  .cta-block::before {
+    content:'';
+    display:block;
+    height:1px;
+    background:linear-gradient(90deg,transparent,rgba(201,168,76,0.3),transparent);
+    margin-bottom:28px;
+  }
+
+  .cta-heading {
+    font-family:'Cinzel',serif;
+    font-size:14px;
+    letter-spacing:0.15em;
+    color:var(--gold);
+    margin-bottom:10px;
+  }
+
+  .cta-sub {
+    font-size:15px;
+    color:var(--text-dim);
+    font-style:italic;
+    margin-bottom:24px;
+    line-height:1.6;
+  }
+
+  .btn-cta {
+    display:block;
+    width:100%;
+    padding:17px;
+    background:linear-gradient(135deg,rgba(201,168,76,0.22),rgba(201,168,76,0.1));
+    border:1px solid rgba(201,168,76,0.6);
+    color:var(--gold-light);
+    font-family:'Cinzel',serif;
+    font-size:11px;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    text-decoration:none;
+    cursor:pointer;
+    transition:all .35s;
+    margin-bottom:12px;
+  }
+  .btn-cta:hover {
+    background:rgba(201,168,76,0.3);
+    box-shadow:0 0 30px rgba(201,168,76,0.2);
+  }
+
+  .btn-retry {
+    background:transparent;
+    border:1px solid rgba(155,142,114,0.2);
+    color:var(--text-dim);
+    font-family:'Cinzel',serif;
+    font-size:9px;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    padding:12px;
+    width:100%;
+    cursor:pointer;
+    transition:all .3s;
+  }
+  .btn-retry:hover { border-color:rgba(201,168,76,0.3); color:var(--text); }
+
+  .price-note {
+    margin-top:14px;
+    font-size:13px;
+    color:var(--text-dim);
+    font-style:italic;
+  }
+  .price-note strong { color:var(--gold); font-style:normal; }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1: ENTRY -->
+<div id="entry" class="screen active">
+  <div class="logo">◈ Sacred Geometry Blueprint</div>
+
+  <svg class="spinner" viewBox="0 0 120 120" fill="none">
+    <circle cx="60" cy="60" r="55" stroke="#C9A84C" stroke-width="0.5" opacity="0.2"/>
+    <circle cx="60" cy="60" r="35" stroke="#C9A84C" stroke-width="0.4" opacity="0.3"/>
+    <circle cx="60" cy="24" r="18" stroke="#C9A84C" stroke-width="0.5" opacity="0.25"/>
+    <circle cx="60" cy="96" r="18" stroke="#C9A84C" stroke-width="0.5" opacity="0.25"/>
+    <circle cx="29" cy="42" r="18" stroke="#C9A84C" stroke-width="0.5" opacity="0.25"/>
+    <circle cx="91" cy="42" r="18" stroke="#C9A84C" stroke-width="0.5" opacity="0.25"/>
+    <circle cx="29" cy="78" r="18" stroke="#C9A84C" stroke-width="0.5" opacity="0.25"/>
+    <circle cx="91" cy="78" r="18" stroke="#C9A84C" stroke-width="0.5" opacity="0.25"/>
+    <circle cx="60" cy="60" r="4" fill="#C9A84C" opacity="0.7"/>
+    <circle cx="60" cy="24" r="2.5" fill="#4ECDC4" opacity="0.5"/>
+    <circle cx="91" cy="78" r="2.5" fill="#4ECDC4" opacity="0.5"/>
+    <circle cx="29" cy="78" r="2.5" fill="#4ECDC4" opacity="0.5"/>
+  </svg>
+
+  <h1>Discover Your Life Path</h1>
+  <p class="tagline">Your name and birthdate encode a sacred pattern.<br>Enter them to reveal your number.</p>
+
+  <div class="card">
+    <label class="field-label">Full Birth Name</label>
+    <input type="text" id="iName" placeholder="As it appears on your birth record">
+
+    <label class="field-label">Date of Birth</label>
+    <div class="dob-row">
+      <select id="iDay"><option value="">Day</option></select>
+      <select id="iMonth">
+        <option value="">Month</option>
+        <option value="1">Jan</option><option value="2">Feb</option>
+        <option value="3">Mar</option><option value="4">Apr</option>
+        <option value="5">May</option><option value="6">Jun</option>
+        <option value="7">Jul</option><option value="8">Aug</option>
+        <option value="9">Sep</option><option value="10">Oct</option>
+        <option value="11">Nov</option><option value="12">Dec</option>
+      </select>
+      <select id="iYear"><option value="">Year</option></select>
+    </div>
+
+    <button class="btn-main" onclick="calculate()">◈ Reveal My Number</button>
+    <p class="free-badge"><span>Free</span> — No sign up. No email. Just your truth.</p>
+  </div>
+</div>
+
+<!-- SCREEN 2: LOADING -->
+<div id="loading" class="screen">
+  <div class="loading-ring"></div>
+  <div class="loading-text">Reading the pattern...</div>
+</div>
+
+<!-- SCREEN 3: RESULT -->
+<div id="result" class="screen">
+  <div class="result-top">
+    <div class="result-brand">◈ Blueprint Lite · Sacred Geometry</div>
+    <div class="result-name" id="rName"></div>
+    <div class="result-dob" id="rDob"></div>
+
+    <div class="number-reveal">
+      <div class="number-label-sm">Your Life Path</div>
+      <div class="big-number" id="rNumber"></div>
+      <div id="rGeo" class="geo-mini"></div>
+      <div class="number-title" id="rTitle"></div>
+    </div>
+  </div>
+
+  <div class="teaser-block">
+    <div class="teaser-heading">◈ What This Means</div>
+    <div class="teaser-text" id="rTeaser"></div>
+  </div>
+
+  <div class="locked-section">
+    <div class="locked-row">
+      <span class="locked-row-label">Expression Number</span>
+      <span class="lock-icon">◈</span>
+    </div>
+    <div class="locked-row">
+      <span class="locked-row-label">Soul Urge Number</span>
+      <span class="lock-icon">◈</span>
+    </div>
+    <div class="locked-row">
+      <span class="locked-row-label">Sacred Geometry Reading</span>
+      <span class="lock-icon">◈</span>
+    </div>
+    <div class="locked-row">
+      <span class="locked-row-label">Your Gifts & Shadow Teaching</span>
+      <span class="lock-icon">◈</span>
+    </div>
+    <div class="locked-row" style="border:none">
+      <span class="locked-row-label">Personal Year 2026</span>
+      <span class="lock-icon">◈</span>
+    </div>
+    <p class="locked-note">Your full Blueprint contains 6 deep sections, all 5 sacred numbers, your personal geometry, and a printable PDF report.</p>
+  </div>
+
+  <div class="cta-block">
+    <div class="cta-heading">Your Full Blueprint Awaits</div>
+    <p class="cta-sub" id="rCta"></p>
+    <a class="btn-cta" href="https://selar.com" target="_blank" id="rLink">◈ Get My Full Blueprint Report</a>
+    <button class="btn-retry" onclick="reset()">◈ Try Another Name</button>
+    <p class="price-note">Full Report — <strong>UGX 45,000</strong> (~$12) · Delivered within 24 hours</p>
+  </div>
+</div>
+
+<script>
+// Populate dropdowns
+const dayEl = document.getElementById('iDay');
+for(let d=1;d<=31;d++){const o=document.createElement('option');o.value=d;o.textContent=d;dayEl.appendChild(o);}
+const yearEl = document.getElementById('iYear');
+for(let y=new Date().getFullYear()-10;y>=1930;y--){const o=document.createElement('option');o.value=y;o.textContent=y;yearEl.appendChild(o);}
+
+// Numerology
+function reduce(n){
+  while(n>9){
+    if(n===11||n===22||n===33) break;
+    n=String(n).split('').reduce((a,b)=>a+parseInt(b),0);
+  }
+  return n;
+}
+
+function lifePathCalc(d,m,y){
+  return reduce(String(d+m).split('').concat(String(y).split('')).reduce((a,b)=>a+parseInt(b),0));
+}
+
+const monthNames=['','January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const data = {
+  1:{name:"The Architect",teaser:"You carry the frequency of pure beginnings. In sacred geometry, 1 is the divine point — the origin from which all other forms emerge. You were coded at birth with the energy of initiation, leadership, and original vision. There is something in you that must create what has never existed before.",cta:"Discover your Expression Number, Soul Urge, and the sacred geometry that governs your entire energy field."},
+  2:{name:"The Bridge",teaser:"You hold the sacred geometry of the Vesica Piscis — the space created when two circles overlap in perfect union. You are the bridge between worlds, between people, between ideas. Your power is not loud. It is the quiet force that holds everything together.",cta:"Your Soul Urge and Expression Numbers reveal why connection is both your greatest gift and your greatest challenge."},
+  3:{name:"The Creator",teaser:"The triangle — the first shape that can contain space — lives in your frequency. You arrived carrying the energy of expression, creativity, and the divine voice made manifest. Joy flows through you naturally. So does the power to move others with words, art, and presence.",cta:"Your full Blueprint reveals which creative path aligns with your soul's deepest purpose — and why some expressions feel hollow."},
+  4:{name:"The Foundation",teaser:"You carry the geometry of the square — four directions, four elements, four seasons. You are the ground upon which everything lasting is built. Others dream. You build what remains. Your discipline is not learned — it is encoded.",cta:"Discover why your Soul Urge might be in direct tension with your Life Path — and how to resolve it for lasting peace."},
+  5:{name:"The Navigator",teaser:"The pentagram — the sacred shape that encodes φ, the golden ratio — is your geometry. Every line in a pentagram contains the divine proportion 1.618. You were built for freedom, movement, and the discovery of new territories. The world is not too big for you. It is exactly the right size.",cta:"Your Expression Number reveals whether your freedom is meant to be lived through travel, creativity, business, or something rarer."},
+  6:{name:"The Harmonist",teaser:"The hexagon — nature's most efficient structure, found in honeycombs, snowflakes, and basalt — is your sacred form. You create the conditions in which life flourishes. Beauty, love, and home are not preferences for you. They are needs encoded into your geometry.",cta:"Your full Blueprint reveals where your giving must have boundaries — the shadow teaching that changes everything for a 6."},
+  7:{name:"The Seeker",teaser:"Seven appears in every sacred tradition on earth. Seven chakras. Seven classical planets. Seven notes in the musical scale. You carry the frequency of deep knowing — the mystic who finds truth beneath surfaces. Your mind operates at depths most people never reach.",cta:"Discover which of your 5 sacred numbers holds the key to turning your inner wisdom into outer impact."},
+  8:{name:"The Manifestor",teaser:"The number 8 on its side is infinity — ∞. You carry the geometry of endless cycles between earth and sky, matter and spirit. You were built to master both worlds. Abundance is not a wish for you. It is a law — if you understand how the cycle works.",cta:"Your Shadow Teaching in the full Blueprint is one of the most important things a Life Path 8 can ever read."},
+  9:{name:"The Sage",teaser:"The 9 is the most complete of all numbers. Multiply any number by 9 and the digits always return to 9. This is your nature — you contain everything that came before. You are the completion, the wisdom keeper, the one who has come to give rather than gather.",cta:"Your Soul Urge Number reveals what the Sage in you truly hungers for beneath all the giving."},
+  11:{name:"The Illuminator",teaser:"You carry a Master Number. The 11 does not reduce — it stands as two pillars of light, a gateway between frequencies. You are not here simply to live a life. You are here to be a channel. This is both your extraordinary gift and the reason ordinary paths never quite fit.",cta:"Master Number carriers need a deeper reading. Your full Blueprint decodes all 5 numbers of your complete sacred signature."},
+  22:{name:"The Master Builder",teaser:"The 22 is the most powerful number in existence. You carry the capacity to take the highest visions and build them into physical reality that outlasts you. One person with a Life Path 22 can shift the direction of thousands of lives. This is not a small blueprint.",cta:"The full Blueprint Report is not optional for a 22. You need to understand every layer of your sacred signature."},
+  33:{name:"The Master Teacher",teaser:"The rarest of all Life Paths. The 33 carries the frequency of unconditional compassion — love that has passed through fire and emerged as light. You are here to teach not from knowledge, but from lived transformation. Few will understand you. Many will be changed by you.",cta:"Your complete reading spans all 5 sacred numbers and reveals the specific path your mastery is meant to walk."}
+};
+
+function getSVG(n){
+  const s=100,c=50,r=36,g='#C9A84C';
+  const num=n===11?2:n===22?4:n===33?3:n;
+  function poly(sides,rad,cx,cy,rot=0){
+    const pts=[];
+    for(let i=0;i<sides;i++){const a=(i/sides)*Math.PI*2+rot;pts.push(`${cx+rad*Math.cos(a)},${cy+rad*Math.sin(a)}`);}
+    return pts.join(' ');
+  }
+  const shape = num===1
+    ? `<circle cx="${c}" cy="${c}" r="22" stroke="${g}" stroke-width="1.5" fill="none"/><circle cx="${c}" cy="${c}" r="7" fill="${g}" opacity="0.8"/>`
+    : `<polygon points="${poly(num,r*0.85,c,c,-Math.PI/2)}" stroke="${g}" stroke-width="1.5" fill="none" opacity="0.9"/>
+       <polygon points="${poly(num,r*0.5,c,c,-Math.PI/2+(Math.PI/num))}" stroke="${g}" stroke-width="0.7" fill="none" opacity="0.4"/>`;
+  return `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" fill="none">
+    <circle cx="${c}" cy="${c}" r="${r}" stroke="${g}" stroke-width="0.5" opacity="0.2"/>
+    ${shape}
+    <circle cx="${c}" cy="${c}" r="3" fill="${g}" opacity="0.7"/>
+  </svg>`;
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function calculate(){
+  const name=document.getElementById('iName').value.trim();
+  const day=parseInt(document.getElementById('iDay').value);
+  const month=parseInt(document.getElementById('iMonth').value);
+  const year=parseInt(document.getElementById('iYear').value);
+  if(!name||!day||!month||!year){alert('Please enter your name and full date of birth.');return;}
+
+  show('loading');
+
+  setTimeout(()=>{
+    const lp = lifePathCalc(day,month,year);
+    const info = data[lp] || data[9];
+    const firstName = name.split(' ')[0];
+
+    document.getElementById('rName').textContent = name;
+    document.getElementById('rDob').textContent = `${monthNames[month]} ${day}, ${year}`;
+    document.getElementById('rNumber').textContent = lp;
+    document.getElementById('rTitle').textContent = info.name;
+    document.getElementById('rGeo').innerHTML = getSVG(lp);
+    document.getElementById('rTeaser').textContent = info.teaser;
+    document.getElementById('rCta').textContent = `${firstName}, this is only the first layer. Your complete sacred signature contains 5 numbers, each one a different dimension of who you are. ${info.cta}`;
+
+    show('result');
+  }, 2200);
+}
+
+function reset(){ show('entry'); }
+</script>
+</body>
+</html>
