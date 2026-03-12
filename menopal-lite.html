@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MenoPal Lite — Free 3-Day Menopause Journal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@300;400;500;600&family=EB+Garamond:ital@1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --midnight: #0D1B2A;
+  --deep-teal: #1B3A4B;
+  --teal: #2E6B82;
+  --teal-light: #4A9BB5;
+  --seafoam: #7EC8C8;
+  --silver: #C8D8E4;
+  --silver-light: #E8F0F5;
+  --moon: #F4F1ED;
+  --amber: #C9956B;
+  --amber-soft: #E8C4A0;
+  --gold: #B8955A;
+  --ink: #0D1B2A;
+  --mist: #D4E4EE;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--midnight);
+  color: var(--moon);
+  font-family: 'Jost', sans-serif;
+  min-height: 100vh;
+}
+
+/* ── COVER ── */
+#cover {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #0D1B2A 0%, #1B3A4B 50%, #0D2535 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+#cover::before {
+  content: '';
+  position: absolute;
+  top: -120px; right: -120px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(126,200,200,0.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+#cover::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(201,149,107,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.moon-symbol {
+  font-size: 72px;
+  margin-bottom: 24px;
+  animation: moonpulse 8s ease-in-out infinite;
+  display: block;
+}
+
+@keyframes moonpulse {
+  0%,100% { opacity:1; transform: scale(1); }
+  50% { opacity:0.7; transform: scale(1.06); }
+}
+
+.cover-eyebrow {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.55em;
+  color: var(--seafoam);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.cover-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(56px, 11vw, 90px);
+  font-weight: 300;
+  color: var(--moon);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.cover-title span {
+  color: var(--seafoam);
+  font-style: italic;
+}
+
+.cover-sub {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--silver);
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  opacity: 0.8;
+}
+
+.cover-line {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal-light), transparent);
+  margin: 0 auto 40px;
+}
+
+.cover-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 4vw, 26px);
+  font-style: italic;
+  color: var(--amber-soft);
+  margin-bottom: 16px;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.cover-desc {
+  font-size: 13px;
+  color: var(--silver);
+  max-width: 420px;
+  line-height: 1.8;
+  margin-bottom: 50px;
+  opacity: 0.85;
+  letter-spacing: 0.02em;
+}
+
+.btn-begin {
+  background: linear-gradient(135deg, var(--teal), var(--deep-teal));
+  color: var(--moon);
+  border: 1px solid var(--teal-light);
+  padding: 16px 52px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 20px;
+}
+
+.btn-begin:hover {
+  background: linear-gradient(135deg, var(--teal-light), var(--teal));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(78,155,181,0.3);
+}
+
+.cover-note {
+  font-size: 11px;
+  color: var(--silver);
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
+
+/* ── APP SHELL ── */
+#app { display:none; min-height:100vh; background: var(--midnight); }
+
+/* ── TOP BAR ── */
+.top-bar {
+  background: linear-gradient(90deg, var(--midnight), var(--deep-teal));
+  border-bottom: 1px solid rgba(78,155,181,0.2);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.bar-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  color: var(--seafoam);
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
+.bar-day {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--silver);
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.bar-moon {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* ── DAY TABS ── */
+.day-nav {
+  display: flex;
+  gap: 6px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  background: rgba(27,58,75,0.4);
+  border-bottom: 1px solid rgba(78,155,181,0.15);
+  scrollbar-width: none;
+}
+.day-nav::-webkit-scrollbar { display:none; }
+
+.day-tab {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border: 1px solid rgba(78,155,181,0.25);
+  background: transparent;
+  color: var(--silver);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.day-tab:hover {
+  border-color: var(--seafoam);
+  color: var(--seafoam);
+}
+
+.day-tab.active {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--moon);
+}
+
+.day-tab.locked {
+  opacity: 0.35;
+  cursor: default;
+  border-color: rgba(78,155,181,0.1);
+}
+
+/* ── DAY CONTENT ── */
+.day-panel {
+  display: none;
+  padding: 30px 20px 60px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.day-panel.active { display: block; }
+
+.day-header {
+  margin-bottom: 30px;
+}
+
+.day-number {
+  font-size: 10px;
+  letter-spacing: 0.5em;
+  color: var(--seafoam);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.day-theme {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 6vw, 42px);
+  font-weight: 300;
+  color: var(--moon);
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.day-theme em {
+  color: var(--amber-soft);
+  font-style: italic;
+}
+
+.day-tagline {
+  font-size: 13px;
+  color: var(--silver);
+  opacity: 0.75;
+  letter-spacing: 0.05em;
+  font-style: italic;
+}
+
+.divider {
+  width: 50px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--teal-light), transparent);
+  margin: 20px 0;
+}
+
+/* ── WISDOM BLOCK ── */
+.wisdom-block {
+  background: rgba(27,58,75,0.5);
+  border-left: 3px solid var(--seafoam);
+  padding: 20px 22px;
+  margin-bottom: 24px;
+  border-radius: 0 4px 4px 0;
+}
+
+.wisdom-label {
+  font-size: 9px;
+  letter-spacing: 0.5em;
+  color: var(--seafoam);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.wisdom-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--amber-soft);
+  line-height: 1.7;
+}
+
+/* ── INSIGHT BLOCK ── */
+.insight-block {
+  background: rgba(13,27,42,0.6);
+  border: 1px solid rgba(78,155,181,0.2);
+  padding: 20px;
+  margin-bottom: 24px;
+  border-radius: 2px;
+}
+
+.insight-label {
+  font-size: 9px;
+  letter-spacing: 0.5em;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.insight-text {
+  font-size: 14px;
+  color: var(--silver);
+  line-height: 1.85;
+}
+
+/* ── SYMPTOM TRACKER ── */
+.symptom-tracker {
+  background: rgba(27,58,75,0.3);
+  border: 1px solid rgba(78,155,181,0.15);
+  padding: 20px;
+  margin-bottom: 24px;
+  border-radius: 2px;
+}
+
+.tracker-label {
+  font-size: 9px;
+  letter-spacing: 0.5em;
+  color: var(--seafoam);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.symptom-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.symptom-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid rgba(78,155,181,0.2);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 12px;
+  color: var(--silver);
+  background: rgba(13,27,42,0.4);
+}
+
+.symptom-chip:hover {
+  border-color: var(--seafoam);
+  color: var(--seafoam);
+}
+
+.symptom-chip.active {
+  background: rgba(46,107,130,0.4);
+  border-color: var(--seafoam);
+  color: var(--seafoam);
+}
+
+.symptom-chip .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.intensity-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.intensity-label {
+  font-size: 11px;
+  color: var(--silver);
+  opacity: 0.7;
+  width: 100px;
+}
+
+.intensity-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.int-dot {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(78,155,181,0.3);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--silver);
+  transition: all 0.2s;
+}
+
+.int-dot:hover, .int-dot.active {
+  border-color: var(--seafoam);
+  background: var(--teal);
+  color: var(--moon);
+}
+
+/* ── JOURNAL SECTIONS ── */
+.journal-section {
+  margin-bottom: 24px;
+}
+
+.journal-label {
+  font-size: 9px;
+  letter-spacing: 0.5em;
+  color: var(--teal-light);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.journal-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(78,155,181,0.15);
+}
+
+.journal-prompt {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--amber-soft);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+textarea {
+  width: 100%;
+  background: rgba(13,27,42,0.7);
+  border: 1px solid rgba(78,155,181,0.2);
+  border-radius: 2px;
+  color: var(--moon);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  padding: 16px;
+  resize: vertical;
+  min-height: 120px;
+  transition: border-color 0.2s;
+  line-height: 1.7;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--seafoam);
+  background: rgba(13,27,42,0.85);
+}
+
+textarea::placeholder {
+  color: rgba(200,216,228,0.3);
+  font-style: italic;
+}
+
+/* ── AFFIRMATION ── */
+.affirmation-block {
+  background: linear-gradient(135deg, rgba(46,107,130,0.2), rgba(27,58,75,0.4));
+  border: 1px solid rgba(126,200,200,0.2);
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.affirmation-block::before {
+  content: '◈';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--midnight);
+  padding: 0 8px;
+  color: var(--seafoam);
+  font-size: 14px;
+}
+
+.affirmation-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 4vw, 24px);
+  font-style: italic;
+  color: var(--seafoam);
+  line-height: 1.6;
+}
+
+/* ── SAVE BUTTON ── */
+.save-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--teal), var(--deep-teal));
+  border: 1px solid var(--teal-light);
+  color: var(--moon);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+}
+
+.save-btn:hover {
+  background: linear-gradient(135deg, var(--teal-light), var(--teal));
+  box-shadow: 0 4px 20px rgba(78,155,181,0.3);
+}
+
+
+.day-tab.locked {
+  opacity: 0.3;
+  cursor: default;
+  border-color: rgba(78,155,181,0.08);
+  pointer-events: none;
+}
+
+.locked-panel {
+  padding: 40px 20px 60px;
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.locked-moon { font-size: 60px; margin-bottom: 20px; display:block; animation: moonpulse 8s ease-in-out infinite; }
+
+.locked-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 6vw, 40px);
+  font-weight: 300;
+  color: var(--moon);
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+.locked-sub {
+  font-size: 13px;
+  color: var(--silver);
+  opacity: 0.8;
+  line-height: 1.8;
+  max-width: 420px;
+  margin: 0 auto 30px;
+}
+
+.locked-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 36px;
+}
+
+.locked-pill {
+  padding: 6px 14px;
+  border: 1px solid rgba(78,155,181,0.2);
+  font-size: 11px;
+  color: var(--silver);
+  opacity: 0.6;
+  letter-spacing: 0.1em;
+}
+
+.btn-upgrade {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--teal), var(--deep-teal));
+  border: 1px solid var(--teal-light);
+  color: var(--moon);
+  padding: 16px 48px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s;
+  margin-bottom: 16px;
+  display: block;
+  max-width: 340px;
+  margin: 0 auto 16px;
+}
+
+.btn-upgrade:hover {
+  background: linear-gradient(135deg, var(--teal-light), var(--teal));
+  box-shadow: 0 8px 30px rgba(78,155,181,0.3);
+}
+
+.upgrade-note {
+  font-size: 11px;
+  color: var(--silver);
+  opacity: 0.5;
+  letter-spacing: 0.05em;
+}
+
+.save-confirm {
+  text-align: center;
+  font-size: 12px;
+  color: var(--seafoam);
+  margin-top: 8px;
+  height: 20px;
+  transition: opacity 0.3s;
+  letter-spacing: 0.1em;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-section {
+  padding: 0 20px 20px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.progress-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--silver);
+  opacity: 0.6;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  height: 3px;
+  background: rgba(78,155,181,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--seafoam));
+  transition: width 0.4s;
+}
+
+/* ── STREAK ── */
+.streak-banner {
+  background: rgba(201,149,107,0.1);
+  border: 1px solid rgba(201,149,107,0.2);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 20px 20px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.streak-text {
+  font-size: 12px;
+  color: var(--amber-soft);
+  letter-spacing: 0.1em;
+}
+
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover">
+  <span class="moon-symbol">🌕</span>
+  <div class="cover-eyebrow">Your 30-Day Companion</div>
+  <div class="cover-title">Meno<span>Pal</span></div>
+  <div class="cover-sub">Menopause Journal</div>
+  <div class="cover-line"></div>
+  <div class="cover-tagline">"You are not falling apart.<br>You are coming into full power."</div>
+  <div class="cover-desc">Experience 3 free days of your menopause journal. Track symptoms, reflect, and process your transition. Days 4–30 available in the full MenoPal journey.</div>
+  <button class="btn-begin" onclick="startJourney()">Begin Your Journey</button>
+  <div class="cover-note">3 days FREE · Saves automatically · No login required</div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="top-bar">
+    <div class="bar-brand">MenoPal</div>
+    <div class="bar-day" id="barDay">Day 1</div>
+    <div class="bar-moon">🌕</div>
+  </div>
+
+  <div class="day-nav" id="dayNav"></div>
+
+  <div id="streakBanner" class="streak-banner" style="display:none">
+    <span>🔥</span>
+    <span class="streak-text" id="streakText"></span>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-label">Journey Progress</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:3%"></div></div>
+  </div>
+
+  <div id="dayPanels"></div>
+</div>
+
+<script>
+const DAYS = [
+  {
+    theme: "The First Honest <em>Breath</em>",
+    tagline: "Naming what is actually happening",
+    wisdom: "Your body is not betraying you. It is completing a cycle that billions of women have walked before you.",
+    insight: "Menopause is not a medical problem to be solved. It is a biological transition — the most significant hormonal shift since puberty. The symptoms you feel are real. The confusion, the heat, the fog, the emotion. This journal is the first place where all of it is welcome.",
+    symptoms: ["Hot flash","Night sweat","Brain fog","Fatigue","Mood shift","Insomnia","Joint ache","Heart race","Headache","Anxiety"],
+    morningPrompt: "Right now, how does my body feel? What is the loudest symptom today?",
+    eveningPrompt: "What was the hardest moment of today? What got me through it?",
+    affirmation: "I am allowed to name what I am experiencing without minimising it."
+  },
+  {
+    theme: "What Nobody <em>Warned</em> You About",
+    tagline: "Grief, relief, and everything between",
+    wisdom: "Many women feel grief at this transition — and also unexpected relief. Both are true. Both are allowed.",
+    insight: "The isolation of menopause is one of its cruelest aspects. It happens largely in private, often dismissed by doctors, misunderstood by partners, invisible to younger colleagues. You are not alone in feeling alone. And naming that is the beginning of changing it.",
+    symptoms: ["Hot flash","Night sweat","Brain fog","Fatigue","Mood shift","Insomnia","Irritability","Low mood","Forgetfulness","Dry skin"],
+    morningPrompt: "What did nobody warn me about this transition that I wish someone had said?",
+    eveningPrompt: "Where did I feel unseen or misunderstood today? Where did I feel held?",
+    affirmation: "My experience is valid even when the world does not reflect it back to me."
+  },
+  {
+    theme: "The <em>Heat</em> Inside",
+    tagline: "Understanding the hot flash — body and soul",
+    wisdom: "Some traditions see the menopausal heat as the body burning away what no longer serves. What if the flash is a release?",
+    insight: "Hot flashes affect up to 80% of women during menopause. They are caused by the hypothalamus — your brain's thermostat — becoming hypersensitive as oestrogen drops. Understanding this does not make them less uncomfortable. But it makes them less frightening. Your brain is recalibrating. You are not broken.",
+    symptoms: ["Hot flash intensity","Night sweat","Sleep disruption","Fatigue after","Heart rate","Anxiety before","Duration","Frequency","Triggers noted","Body location"],
+    morningPrompt: "When a hot flash comes today, what will I tell myself in that moment?",
+    eveningPrompt: "What triggers did I notice today? Time of day, food, stress, emotion?",
+    affirmation: "I breathe through the heat and emerge on the other side, still whole."
+  },
+  {
+    theme: "Reclaiming <em>Sleep</em>",
+    tagline: "The night belongs to you again",
+    wisdom: "Exhaustion is not weakness. It is the cost of a body working harder than anyone can see.",
+    insight: "Sleep disruption is one of the most debilitating symptoms of menopause — and the least discussed. Night sweats, racing thoughts, and hormonal shifts in cortisol conspire against rest. Tracking your sleep patterns is the first step toward reclaiming them.",
+    symptoms: ["Sleep onset","Night waking","Night sweat","Dream intensity","Morning fatigue","Afternoon crash","Anxiety at night","Temperature","Mind racing","Early waking"],
+    morningPrompt: "How did I sleep? What did I notice in the night?",
+    eveningPrompt: "What am I willing to do differently tonight to prepare my body for rest?",
+    affirmation: "Rest is not a luxury. It is medicine, and I deserve it."
+  },
+  {
+    theme: "The Fog and the <em>Clarity</em>",
+    tagline: "Navigating brain fog with grace",
+    wisdom: "The brain fog is real. But so is the clarity that comes when you stop fighting the transition and start working with it.",
+    insight: "Oestrogen supports memory, focus, and cognitive processing. As it fluctuates, so does your mental sharpness. Brain fog during menopause is neurological, not psychological. You are not losing your mind. You are navigating a temporary rewiring — one that many women report leads to unexpected clarity and wisdom on the other side.",
+    symptoms: ["Brain fog","Word finding","Concentration","Memory","Decision fatigue","Mental clarity","Focus duration","Overwhelm","Task completion","Mental energy"],
+    morningPrompt: "What does my mind feel like today — weather report style? (stormy, foggy, partly clear...)",
+    eveningPrompt: "What one thing did my mind do well today, even in the fog?",
+    affirmation: "My intelligence is not diminished. It is reorganising itself into wisdom."
+  },
+  {
+    theme: "The <em>Emotional</em> Weather",
+    tagline: "All feelings are information, not problems",
+    wisdom: "When emotions rise intensely during menopause, the body is completing old cycles of feeling that were never fully processed.",
+    insight: "The emotional intensity of perimenopause and menopause is hormonal, real, and often disorienting. Progesterone — which has calming effects — drops first, leaving oestrogen fluctuating alone. The result is a nervous system that is more sensitive, more reactive, more raw. This is information, not malfunction.",
+    symptoms: ["Irritability","Anxiety","Low mood","Emotional sensitivity","Tearfulness","Rage","Emptiness","Joy","Overwhelm","Emotional flatness"],
+    morningPrompt: "What emotions have been loudest this week? What might they be trying to tell me?",
+    eveningPrompt: "Did I honour my emotions today or push them down? What would it look like to honour them tomorrow?",
+    affirmation: "My emotions are not too much. They are asking to be witnessed."
+  },
+  {
+    theme: "Body <em>Belonging</em>",
+    tagline: "Coming home to a body that is changing",
+    wisdom: "The body you have now is not the body you failed to maintain. It is the body that has carried you this far.",
+    insight: "Changes in body composition, skin, hair, and libido during menopause can feel like loss. And that grief is real. But there is also something else available — a different relationship with your body. One based on what it can do, how it feels, what it needs. Rather than how it appears.",
+    symptoms: ["Body comfort","Libido","Joint ease","Skin sensation","Hair changes","Weight shift","Bloating","Physical energy","Body confidence","Physical pain"],
+    morningPrompt: "What does my body need from me today — not want, not look like — need?",
+    eveningPrompt: "Where did I show my body kindness today? Where was I harsh with it?",
+    affirmation: "This body has earned its changes. I am learning to love what it is becoming."
+  },
+  {
+    theme: "What You Are <em>Releasing</em>",
+    tagline: "The invitation to let go",
+    wisdom: "Menopause has a biological task: to complete the reproductive cycle. But it also has a soul task — to release what no longer fits.",
+    insight: "Many women find that menopause initiates a profound clearing — of relationships that no longer serve, roles that have been outgrown, people-pleasing patterns built over decades. The body is in a process of release. The self is being invited to follow.",
+    symptoms: ["Energy for others","People pleasing","Boundary ease","Resentment","Clarity of 'no'","Sense of freedom","Grief of change","Identity shift","Confidence","Inner authority"],
+    morningPrompt: "What am I carrying right now that I am ready — or almost ready — to put down?",
+    eveningPrompt: "What said yes to today that I wish I had said no to? What does that tell me?",
+    affirmation: "Letting go is not failure. It is wisdom made visible."
+  },
+  {
+    theme: "The Women <em>Before You</em>",
+    tagline: "You carry their strength in your blood",
+    wisdom: "Every woman in your lineage walked this transition. Some with support, some alone. You carry their resilience.",
+    insight: "You are not the first woman to navigate this. Your mother, her mother, her mother's mother — all made this crossing. In many indigenous traditions, women who had passed through menopause became the wisdom keepers of the community. The crone was not dismissed. She was consulted. That lineage lives in you.",
+    symptoms: ["Connection to self","Spiritual awareness","Sense of purpose","Ancestral feeling","Wisdom sense","Groundedness","Inner peace","Loneliness","Community need","Belonging"],
+    morningPrompt: "What wisdom do the women in my lineage have to offer me right now?",
+    eveningPrompt: "If my younger self could see me navigating this — what would she feel?",
+    affirmation: "I stand in a long line of women who crossed this threshold and were not destroyed by it."
+  },
+  {
+    theme: "Rest as <em>Resistance</em>",
+    tagline: "Doing less is not giving up",
+    wisdom: "In a world that demands constant output, choosing rest is a radical act of self-knowledge.",
+    insight: "The adrenal glands become the primary producers of oestrogen after menopause. Chronic stress depletes them. Every act of rest you choose is literally supporting your hormonal health — not indulgence. This is biology, not laziness. Your body is asking for something specific. It is asking for less.",
+    symptoms: ["Stress level","Rest taken","Guilt about rest","Adrenal fatigue","Recovery time","Pace of day","Busyness","Overwhelm","Margin in schedule","Peace"],
+    morningPrompt: "Where can I build a genuine pause into today? Not productive rest — actual rest?",
+    eveningPrompt: "Did I rest today? If not, what stopped me? Is that reason as solid as I think?",
+    affirmation: "Rest is not earned by exhaustion. Rest is a right that my body is claiming."
+  },
+  {
+    theme: "Nourishing the <em>Change</em>",
+    tagline: "Food as information for a shifting body",
+    wisdom: "Your body's nutritional needs have shifted. What served you at 30 may not serve you now. This is not failure — it is refinement.",
+    insight: "Oestrogen was partially responsible for calcium regulation, cardiovascular protection, and blood sugar balance. As it declines, nutrition becomes more important — not as a diet, but as information your body needs. Phytoestrogens in foods like flaxseed, soy, and legumes can provide gentle hormonal support. Magnesium-rich foods support sleep and mood. You are not fighting your body — you are feeding its new requirements.",
+    symptoms: ["Energy after eating","Bloating","Sugar cravings","Alcohol sensitivity","Food mood impact","Gut comfort","Inflammation","Weight shifts","Hunger patterns","Food joy"],
+    morningPrompt: "What did my body respond well to in the last few days? What felt like nourishment versus fuel?",
+    eveningPrompt: "How did food affect my mood and symptoms today? Any patterns I am noticing?",
+    affirmation: "I feed myself with the same care I would give someone I deeply love."
+  },
+  {
+    theme: "Moving Through <em>Change</em>",
+    tagline: "Movement as medicine, not punishment",
+    wisdom: "Movement during menopause is not about burning calories. It is about communicating safety to a nervous system under pressure.",
+    insight: "Exercise has a direct impact on menopause symptoms — reducing hot flash frequency, improving sleep, supporting bone density, and regulating mood via endorphins. But the intensity matters. High-intensity exercise can spike cortisol and worsen symptoms. What your body often needs is movement that feels kind — walking, stretching, swimming, dancing. Not performance. Medicine.",
+    symptoms: ["Body movement","Exercise done","Energy after","Joint ease","Motivation","Physical joy","Recovery","Stiffness","Body strength","Balance"],
+    morningPrompt: "What kind of movement would feel kind to my body today — not punishing, genuinely kind?",
+    eveningPrompt: "How did my body feel after whatever movement I did or did not do today?",
+    affirmation: "I move because my body wants to feel alive — not because it needs to be corrected."
+  },
+  {
+    theme: "The Relationship <em>Reckoning</em>",
+    tagline: "Who gets your energy now?",
+    wisdom: "The patience you once had for those who diminish you is a resource menopause often withdraws. Trust that wisdom.",
+    insight: "Many women describe a shift in relationships during menopause — a reduced tolerance for dynamics that drain, a new clarity about who genuinely reciprocates care, and sometimes, a grief for connections that no longer fit. This is not menopause making you difficult. This is menopause clarifying your value.",
+    symptoms: ["Social energy","Tolerance","Boundary ease","Emotional drain","Connection felt","Loneliness","Resentment","Gratitude for others","Desire for solitude","Relational joy"],
+    morningPrompt: "Who in my life gives me energy right now? Who takes it? Is my time reflecting that?",
+    eveningPrompt: "Did I honour my own needs in my relationships today, or did I perform for others?",
+    affirmation: "I am allowed to want more from my relationships. I am allowed to offer less to those who take."
+  },
+  {
+    theme: "Intimacy and <em>Desire</em>",
+    tagline: "A tender, honest conversation",
+    wisdom: "Desire does not disappear in menopause. Sometimes it deepens — for the right kind of intimacy, on your own terms.",
+    insight: "Changes in libido, vaginal dryness, and body confidence can make intimacy feel complicated during menopause. But many women also discover that with the end of the reproductive cycle comes a new kind of desire — more honest, more self-directed, less performance-based. This is not loss. This is evolution.",
+    symptoms: ["Desire level","Physical comfort","Body confidence","Partner connection","Emotional intimacy","Self-touch ease","Boundary confidence","Vulnerability","Pleasure capacity","Authenticity"],
+    morningPrompt: "What does intimacy mean to me right now — with a partner, with myself, with life?",
+    eveningPrompt: "Am I kind to myself about where my desires are right now? Or am I judging what I feel?",
+    affirmation: "My desire is mine. It belongs to no definition but my own."
+  },
+  {
+    theme: "The <em>Midpoint</em> — Taking Stock",
+    tagline: "Two weeks in. What have you learned?",
+    wisdom: "The woman who began this journal two weeks ago had the same wisdom she has today. She is simply more willing to hear it.",
+    insight: "You are at the midpoint of this 30-day journey. This is a moment to pause — not to evaluate your performance, but to notice what has shifted. What have you learned about your body? What have you noticed about your patterns? What has surprised you? The data you have been gathering across these pages is a portrait of your transition — yours, specific, valuable.",
+    symptoms: ["Overall progress","Symptom awareness","Pattern recognition","Self-compassion","Knowledge gain","Emotional processing","Body respect","Journey pride","Hope level","Integration"],
+    morningPrompt: "What is the most important thing I have learned about my body in the last 15 days?",
+    eveningPrompt: "What am I most proud of myself for, in how I have shown up for this transition?",
+    affirmation: "I am my own most important witness. And I am paying attention."
+  },
+  {
+    theme: "Rage as <em>Information</em>",
+    tagline: "Anger is a boundary needing attention",
+    wisdom: "The rage that rises in menopause is often grief that has run out of patience. Listen to what it is protecting.",
+    insight: "The anger many women experience during menopause is among the least socially acceptable symptoms — and among the most informative. Lowered progesterone removes a natural calming buffer. But beyond neurochemistry, menopausal rage often carries decades of unprocessed frustration — with roles assigned, sacrifices invisible, voices silenced. The anger knows something. It is worth asking what.",
+    symptoms: ["Irritability","Rage episodes","Trigger sensitivity","Recovery time","Guilt after anger","Boundary assertion","Frustration level","Patience","Emotional regulation","Anger clarity"],
+    morningPrompt: "What is my anger protecting right now? What would it say if it could speak clearly?",
+    eveningPrompt: "Did any anger arise today? What was underneath it — if I look honestly?",
+    affirmation: "My anger is not shameful. It is a boundary asking to be built."
+  },
+  {
+    theme: "Tending the <em>Sacred</em>",
+    tagline: "Ritual, meaning, and what sustains you",
+    wisdom: "When the body is in transition, the soul needs ritual to stay oriented.",
+    insight: "Many cultures have treated menopause as a sacred rite of passage — the crossing from maiden and mother to wise woman. Not a medical event but a spiritual one. Whatever your belief system, there is wisdom in creating small rituals of acknowledgment — a morning moment, a candle, a word said to yourself — that mark this transition as significant rather than inconvenient.",
+    symptoms: ["Spiritual connection","Sense of meaning","Ritual in day","Grounding","Inner peace","Wonder","Gratitude","Connection to nature","Sense of self","Sacred feeling"],
+    morningPrompt: "What small ritual could I offer myself this week that says: this transition matters?",
+    eveningPrompt: "Where did I find meaning or beauty today, even in difficulty?",
+    affirmation: "I am in a sacred passage. I treat it — and myself — accordingly."
+  },
+  {
+    theme: "The <em>Permission</em> Slip",
+    tagline: "You are allowed",
+    wisdom: "Somewhere along the way, someone taught you that your needs were negotiable. Menopause disagrees.",
+    insight: "Women in midlife often carry decades of conditioning that says: put others first, make yourself smaller, do not want too much, be easier, be grateful. Menopause has a way of making this conditioning increasingly difficult to maintain. The body begins asserting what the person has long suppressed. This is not dysfunction. This is the self reclaiming its authority.",
+    symptoms: ["Saying no ease","Need expression","Self-advocacy","Over-apology","Guilt for needs","Self-permission","Boundary holding","Authenticity","Self-trust","Inner authority"],
+    morningPrompt: "What do I need permission for right now — from myself, not anyone else?",
+    eveningPrompt: "Where did I give myself permission today? Where did I wait for it from someone else?",
+    affirmation: "I do not need anyone's permission to be exactly who I am becoming."
+  },
+  {
+    theme: "Grief and <em>Gratitude</em>",
+    tagline: "Both can be true at the same time",
+    wisdom: "Grief is love with nowhere to go. Let it move through you — it is trying to complete something.",
+    insight: "Grieving the loss of fertility, even when children were never desired or were complete, is a real and valid response to menopause. So is grieving a particular version of identity, a kind of beauty, a certain ease in the body. The grief is allowed. And so, slowly, is gratitude — for the freedom this transition is also bringing. Both truths can live in the same body.",
+    symptoms: ["Grief present","Gratitude felt","Sadness","Acceptance","Resistance","Peace","Identity ease","Loss acknowledged","Appreciation","Both/and feeling"],
+    morningPrompt: "What am I grieving right now in this transition? Can I name it specifically?",
+    eveningPrompt: "What is something about this time of life that I am — even secretly — grateful for?",
+    affirmation: "I can grieve what I am leaving and welcome what I am becoming — at the same time."
+  },
+  {
+    theme: "The <em>Invisible</em> Work",
+    tagline: "Naming what nobody sees",
+    wisdom: "You are doing an enormous amount of invisible labour right now. It counts, even when nobody acknowledges it.",
+    insight: "The work of navigating menopause is not just physical — it is emotional, relational, logistical, and existential. You are managing symptoms, adjusting expectations, recalibrating relationships, and processing a major life transition, often while maintaining every other responsibility you have always held. This is not a quiet time. It is a demanding one. And naming that matters.",
+    symptoms: ["Invisible load","Recognition need","Exhaustion source","Appreciation received","Self-acknowledgment","Endurance","Resilience","Carrying capacity","Support received","Burden ease"],
+    morningPrompt: "What invisible work am I doing right now that no one sees or thanks me for?",
+    eveningPrompt: "Can I thank myself today for something I navigated that nobody noticed?",
+    affirmation: "The work that goes unseen is still real. I see it. I honour it."
+  },
+  {
+    theme: "Who Are You <em>Becoming</em>?",
+    tagline: "The woman on the other side",
+    wisdom: "The woman who completes this transition is not lesser. She is distilled.",
+    insight: "Research on post-menopausal women consistently shows something the cultural narrative misses: many women report higher life satisfaction, stronger sense of self, greater clarity about values, and less concern for others' opinions after completing this transition. The other side of menopause is not decline. For many women, it is the beginning of their most powerful era.",
+    symptoms: ["Identity clarity","Future vision","Self-knowing","Confidence","Purpose sense","Freedom feeling","Power sense","Wisdom embodied","Clarity of values","Self-respect"],
+    morningPrompt: "Who is the woman I am becoming? Describe her — how she moves, what she refuses, what she loves.",
+    eveningPrompt: "What one quality of the woman I am becoming did I embody today, even briefly?",
+    affirmation: "I am not declining. I am distilling into exactly who I was always meant to become."
+  },
+  {
+    theme: "Community and <em>Witness</em>",
+    tagline: "You need to be seen in this",
+    wisdom: "Healing rarely happens in isolation. You need at least one person who says: I see what you are going through.",
+    insight: "Isolation worsens every menopausal symptom. The shame and silence that has historically surrounded this transition has served no one — least of all the women living it. Finding community — whether in person, online, in a subreddit, in a conversation — is not weakness. It is one of the most evidence-based things you can do for your wellbeing during this time.",
+    symptoms: ["Isolation","Connection","Feeling seen","Shame","Openness","Community belonging","Support received","Vulnerability","Hiding symptoms","Honest conversations"],
+    morningPrompt: "Who in my life knows what I am actually going through? Who could I tell more honestly?",
+    eveningPrompt: "Where did I allow myself to be witnessed today — or where did I hide?",
+    affirmation: "I deserve to be seen in this. I am looking for the people who are capable of seeing me."
+  },
+  {
+    theme: "The Medical <em>Landscape</em>",
+    tagline: "You are the expert on your own body",
+    wisdom: "A good doctor is a partner in your health, not the authority on your experience.",
+    insight: "Many women report feeling dismissed by medical providers during menopause — their symptoms minimised, their distress pathologised, their requests for HRT or support refused without adequate reason. You have the right to advocate for yourself. To request information. To seek a second opinion. To insist that your quality of life matters. Tracking your symptoms — exactly as you are doing — gives you evidence, not just feelings, to bring to those conversations.",
+    symptoms: ["Medical support","Advocacy confidence","Symptom documentation","HRT clarity","Provider trust","Medical dismissal","Self-advocacy","Information access","Treatment satisfaction","Body knowledge"],
+    morningPrompt: "What do I wish my doctor understood about my experience that I have never said out loud?",
+    eveningPrompt: "Am I advocating for myself as well as I would for someone I love?",
+    affirmation: "I am the primary expert on my own body. My observations matter."
+  },
+  {
+    theme: "Letters to Your <em>Body</em>",
+    tagline: "A conversation long overdue",
+    wisdom: "Your body has been trying to get your attention for a long time. This might be the moment you finally write back.",
+    insight: "The relationship between women and their bodies is often one of the most difficult of their lives — shaped by cultural messages about how a woman's body should look, perform, and behave. Menopause forces a renegotiation of that relationship. The old terms no longer hold. New ones are being written. This is one of the most profound — and underacknowledged — aspects of this transition.",
+    symptoms: ["Body relationship","Self-compassion","Body trust","Body criticism","Body gratitude","Physical acceptance","Somatic awareness","Body dialogue","Care given","Body respect"],
+    morningPrompt: "If I wrote a letter to my body today — what would I apologise for? What would I thank it for?",
+    eveningPrompt: "What is my body asking for right now that I have been ignoring?",
+    affirmation: "My body is not my enemy. It never was. It has been doing its best with what it had."
+  },
+  {
+    theme: "Financial <em>Sovereignty</em>",
+    tagline: "Your resources in this new chapter",
+    wisdom: "Security is not just financial. But financial autonomy gives the rest of your power somewhere to stand.",
+    insight: "Menopause often coincides with significant life changes — children leaving, career peaking or pivoting, relationships shifting, parents ageing. It can be a time of both resource and vulnerability. For many women, it is also a moment of reckoning with financial autonomy — with whether their resources match their sense of self. There is no shame in this assessment. Only information.",
+    symptoms: ["Financial security","Resource clarity","Future planning","Financial anxiety","Career alignment","Work satisfaction","Economic confidence","Independence","Future vision","Provider/receiver balance"],
+    morningPrompt: "Does my financial situation reflect the life I want to be living in the next chapter? What would I change?",
+    eveningPrompt: "What is one area where I can build more security — financial, emotional, or practical — this week?",
+    affirmation: "I am building a life that can hold the woman I am becoming."
+  },
+  {
+    theme: "The <em>Final</em> Week Begins",
+    tagline: "What this journey has grown in you",
+    wisdom: "The woman who began this journal a month ago was already wise. She is now also witnessed.",
+    insight: "You are entering the final week of this 30-day journey. You have tracked, reflected, processed and witnessed yourself through one of the most significant biological transitions a human body undertakes. That is not a small thing. The awareness you have built — of your patterns, your symptoms, your needs, your edges — belongs to you. No one can take it away.",
+    symptoms: ["Journey integration","Self-knowledge","Pattern mastery","Symptom management","Emotional resilience","Body relationship","Identity clarity","Future readiness","Inner authority","Wholeness"],
+    morningPrompt: "What has this 30 days grown in me that was not there — or not visible — when I began?",
+    eveningPrompt: "What am I most grateful for from this journey so far?",
+    affirmation: "I am different now. The difference is mine, and it is enough."
+  },
+  {
+    theme: "Beyond <em>Symptoms</em>",
+    tagline: "You are more than what your body is doing",
+    wisdom: "You are navigating a physical transition. But you are not your symptoms — you are the one navigating them.",
+    insight: "After 26 days of tracking symptoms, it is worth stepping back and remembering: you are a complete person in the middle of a transition — not a collection of symptoms to be managed. Your desires, your creativity, your relationships, your purpose — these are not on hold until menopause passes. They are available now, alongside everything your body is going through.",
+    symptoms: ["Whole-person awareness","Life beyond symptoms","Joy access","Creative energy","Purpose engagement","Present moment","Self beyond transition","Vitality","Future excitement","Full self presence"],
+    morningPrompt: "What part of my life — separate from menopause — am I most energised about right now?",
+    eveningPrompt: "Where did I show up as my full self today, beyond the transition?",
+    affirmation: "I am not my transition. I am the woman inside it — whole, alive, and present."
+  },
+  {
+    theme: "The <em>Gifts</em> Hidden in the Hard",
+    tagline: "What this time has quietly given you",
+    wisdom: "Everything that has tested you has also shaped you. The shaping is not accidental.",
+    insight: "Many women, looking back from the other side of menopause, identify gifts they did not see coming: a tolerance for their own imperfection, a clarity about what matters, a reduced desire to perform for others, a deeper relationship with their own body, a wisdom earned through difficulty. You do not have to be grateful for the hard parts yet. But you might begin to sense them.",
+    symptoms: ["Hidden gifts","Unexpected gains","Strength discovered","Clarity found","Permission earned","Wisdom sensed","Gratitude emerging","Surprise of growth","Resilience known","Gift of difficulty"],
+    morningPrompt: "What unexpected gift has this transition already brought me — however small or strange?",
+    eveningPrompt: "What is one thing I know now about myself that I could only have learned this way?",
+    affirmation: "The hard has been, and is, shaping me into someone I would choose to be."
+  },
+  {
+    theme: "Writing Your Own <em>Narrative</em>",
+    tagline: "You are the author of this chapter",
+    wisdom: "The story that culture tells about menopause is not the only one available. You can write a different one.",
+    insight: "The dominant cultural narrative about menopause is one of loss, decline, and invisibility. But that narrative was written by people who were not living this transition — and it has served no one well. You have the authority to write a different story. One of initiation. Of power reclaimed. Of a self that finally stopped performing and started becoming. That story is not denial of the hard parts. It holds them — and moves through them.",
+    symptoms: ["Narrative ownership","Story power","Self-authorship","Cultural resistance","Own definition","Voice clarity","Identity sovereignty","Future story","Self-determination","Meaning making"],
+    morningPrompt: "What is the story I am telling myself about this transition? Is it the story I want to be telling?",
+    eveningPrompt: "What one sentence would I write as the title of this chapter of my life?",
+    affirmation: "I am the author. This transition is a chapter I am writing — not one being written about me."
+  },
+  {
+    theme: "The <em>Threshold</em> — Day 30",
+    tagline: "You made it across",
+    wisdom: "Thirty days ago you began. Today you stand on the other side of a month of your own honest attention. That is not nothing. That is everything.",
+    insight: "Thirty days of showing up for yourself. Of tracking, reflecting, sitting with difficulty, naming what is true, and returning — day after day — to the practice of honest self-witness. That is not a small thing in a world that does not make it easy. You have built something here: a record of your transition, a relationship with your own experience, a practice of self-care that belongs entirely to you.",
+    symptoms: ["Journey completion","Transformation felt","Self-knowledge earned","Resilience confirmed","Future readiness","Wholeness","Gratitude","Pride","Integration","Continuation"],
+    morningPrompt: "Who am I today compared to who I was on Day 1? What has changed — even quietly, even a little?",
+    eveningPrompt: "What will I carry forward from these 30 days? What practice, what truth, what permission?",
+    affirmation: "I crossed this threshold with my eyes open. I am ready for what comes next."
+  }
+];
+
+let currentDay = 1;
+
+function startJourney() {
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  buildJournal();
+  goTo(1);
+  checkStreak();
+}
+
+function buildJournal() {
+  const nav = document.getElementById('dayNav');
+  const panels = document.getElementById('dayPanels');
+  nav.innerHTML = '';
+  panels.innerHTML = '';
+
+  DAYS.forEach((day, i) => {
+    const n = i + 1;
+    const tab = document.createElement('button');
+    if (n <= 3) {
+      tab.className = 'day-tab';
+      tab.id = 'tab' + n;
+      tab.textContent = 'Day ' + n;
+      tab.onclick = () => goTo(n);
+    } else {
+      tab.className = 'day-tab locked';
+      tab.textContent = n <= 10 ? 'Day ' + n + ' 🔒' : (n === 30 ? 'Day 30 🔒' : '• •');
+    }
+    nav.appendChild(tab);
+
+    const panel = document.createElement('div');
+    if (n <= 3) {
+      panel.className = 'day-panel';
+      panel.id = 'panel' + n;
+      panel.innerHTML = buildPanel(day, n);
+    } else {
+      panel.className = 'day-panel';
+      panel.id = 'panel' + n;
+      panel.innerHTML = '';
+    }
+    panels.appendChild(panel);
+  });
+
+  // Add locked panel after day 3
+  const lockedDiv = document.createElement('div');
+  lockedDiv.id = 'lockedPanel';
+  lockedDiv.className = 'locked-panel';
+  lockedDiv.style.display = 'none';
+  lockedDiv.innerHTML = buildLockedPanel();
+  panels.appendChild(lockedDiv);
+}
+
+function buildLockedPanel() {
+  const remaining = [4,5,6,7,8,9,10,14,20,25,30].map(n => '<div class="locked-pill">Day ' + n + ' 🔒</div>').join('') + '<div class="locked-pill">+ 17 more 🔒</div>';
+  return `
+    <span class="locked-moon">🌕</span>
+    <div class="locked-heading">27 More Days Are Waiting For You</div>
+    <div class="locked-sub">You have completed your 3 free days. The full 30-day journey continues with daily wisdom, symptom tracking, and guided reflections for every phase of your menopause transition.</div>
+    <div class="locked-days">${remaining}</div>
+    <a class="btn-upgrade" href="https://selar.com/09v712qo97" target="_blank">🌕 Get the Full 30-Day Journey</a>
+    <div class="upgrade-note">One-time · Saves automatically · Yours to keep forever</div>
+  `;
+}
+
+function buildPanel(day, n) {
+  const saved = getSaved(n);
+  const chips = day.symptoms.map((s, i) => {
+    const active = saved.symptoms && saved.symptoms.includes(s) ? 'active' : '';
+    return `<div class="symptom-chip ${active}" onclick="toggleSymptom(this, ${n}, '${s}')"><span class="dot"></span>${s}</div>`;
+  }).join('');
+
+  const intensity = [1,2,3,4,5].map(v => {
+    const active = saved.intensity == v ? 'active' : '';
+    return `<div class="int-dot ${active}" onclick="setIntensity(this, ${n}, ${v})">${v}</div>`;
+  }).join('');
+
+  return `
+    <div class="day-header">
+      <div class="day-number">Day ${n} of 30</div>
+      <div class="day-theme">${day.theme}</div>
+      <div class="day-tagline">${day.tagline}</div>
+    </div>
+    <div class="divider"></div>
+
+    <div class="wisdom-block">
+      <div class="wisdom-label">Today's Wisdom</div>
+      <div class="wisdom-text">"${day.wisdom}"</div>
+    </div>
+
+    <div class="insight-block">
+      <div class="insight-label">Understanding Your Body</div>
+      <div class="insight-text">${day.insight}</div>
+    </div>
+
+    <div class="symptom-tracker">
+      <div class="tracker-label">Today's Symptoms — select all that apply</div>
+      <div class="symptom-grid">${chips}</div>
+      <div class="intensity-row">
+        <div class="intensity-label">Overall intensity</div>
+        <div class="intensity-dots">${intensity}</div>
+      </div>
+    </div>
+
+    <div class="journal-section">
+      <div class="journal-label">Morning Reflection</div>
+      <div class="journal-prompt">${day.morningPrompt}</div>
+      <textarea id="morning${n}" placeholder="Begin here... your words are only yours." rows="5" onchange="autoSave(${n})">${saved.morning||''}</textarea>
+    </div>
+
+    <div class="journal-section">
+      <div class="journal-label">Evening Reflection</div>
+      <div class="journal-prompt">${day.eveningPrompt}</div>
+      <textarea id="evening${n}" placeholder="End here... what needs to be released before rest." rows="5" onchange="autoSave(${n})">${saved.evening||''}</textarea>
+    </div>
+
+    <div class="affirmation-block">
+      <div class="affirmation-text">${day.affirmation}</div>
+    </div>
+
+    <button class="save-btn" onclick="saveDay(${n})">Save Day ${n} — Seal It</button>
+    <div class="save-confirm" id="confirm${n}"></div>
+  `;
+}
+
+function goTo(n) {
+  if (n > 3) {
+    document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('lockedPanel').style.display = 'block';
+    return;
+  }
+  document.getElementById('lockedPanel').style.display = 'none';
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel' + n).classList.add('active');
+  document.getElementById('tab' + n).classList.add('active');
+  document.getElementById('barDay').textContent = 'Day ' + n;
+  currentDay = n;
+  updateProgress(n);
+  document.getElementById('tab' + n).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+function updateProgress(n) {
+  const filled = document.getElementById('dayPanels').querySelectorAll('textarea');
+  let completed = 0;
+  for (let i = 1; i <= 30; i++) {
+    const s = getSaved(i);
+    if (s.morning || s.evening) completed++;
+  }
+  const pct = Math.max(3, Math.round((completed / 30) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function toggleSymptom(el, day, symptom) {
+  el.classList.toggle('active');
+  autoSave(day);
+}
+
+function setIntensity(el, day, val) {
+  el.closest('.intensity-dots').querySelectorAll('.int-dot').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+  autoSave(day);
+}
+
+function getSaved(n) {
+  try {
+    return JSON.parse(localStorage.getItem('menopal_day_' + n)) || {};
+  } catch { return {}; }
+}
+
+function autoSave(n) {
+  const symptoms = [...document.querySelectorAll(`#panel${n} .symptom-chip.active`)].map(c => c.textContent.trim());
+  const intensityEl = document.querySelector(`#panel${n} .int-dot.active`);
+  const data = {
+    morning: document.getElementById('morning' + n)?.value || '',
+    evening: document.getElementById('evening' + n)?.value || '',
+    symptoms,
+    intensity: intensityEl ? intensityEl.textContent : '',
+    savedAt: new Date().toISOString()
+  };
+  localStorage.setItem('menopal_day_' + n, JSON.stringify(data));
+  updateStreak();
+}
+
+function saveDay(n) {
+  autoSave(n);
+  const el = document.getElementById('confirm' + n);
+  el.textContent = '◈ Day ' + n + ' sealed with care';
+  el.style.opacity = 1;
+  setTimeout(() => { el.style.opacity = 0; }, 3000);
+  updateProgress(n);
+}
+
+function updateStreak() {
+  let streak = 0;
+  for (let i = 1; i <= 30; i++) {
+    const s = getSaved(i);
+    if (s.morning || s.evening) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function checkStreak() {
+  const streak = updateStreak();
+  const banner = document.getElementById('streakBanner');
+  if (streak > 0) {
+    banner.style.display = 'flex';
+    document.getElementById('streakText').textContent = streak + (streak === 1 ? ' day' : ' days') + ' of showing up for yourself 🌕';
+  }
+}
+
+</script>
+</body>
+</html>
