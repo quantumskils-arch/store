@@ -547,10 +547,9 @@ textarea::placeholder {
 
 
 .day-tab.locked {
-  opacity: 0.3;
-  cursor: default;
+  opacity: 0.35;
+  cursor: pointer;
   border-color: rgba(78,155,181,0.08);
-  pointer-events: none;
 }
 
 .locked-panel {
@@ -1058,6 +1057,7 @@ function buildJournal() {
     } else {
       tab.className = 'day-tab locked';
       tab.textContent = n <= 10 ? 'Day ' + n + ' 🔒' : (n === 30 ? 'Day 30 🔒' : '• •');
+      tab.onclick = () => showLocked();
     }
     nav.appendChild(tab);
 
@@ -1152,16 +1152,22 @@ function buildPanel(day, n) {
 
     <button class="save-btn" onclick="saveDay(${n})">Save Day ${n} — Seal It</button>
     <div class="save-confirm" id="confirm${n}"></div>
+    ${n === 3 ? `<div style="margin-top:24px; text-align:center;">
+      <div style="font-size:11px;letter-spacing:0.3em;color:#7EC8C8;text-transform:uppercase;margin-bottom:14px;opacity:0.8;">Your journey continues →</div>
+      <button onclick="showLocked()" style="width:100%;padding:16px;background:transparent;border:1px solid rgba(126,200,200,0.3);color:#7EC8C8;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.4em;text-transform:uppercase;cursor:pointer;">See Days 4 – 30 🌕</button>
+    </div>` : ''}
   `;
 }
 
+function showLocked() {
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('lockedPanel').style.display = 'block';
+  document.getElementById('lockedPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function goTo(n) {
-  if (n > 3) {
-    document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('lockedPanel').style.display = 'block';
-    return;
-  }
+  if (n > 3) { showLocked(); return; }
   document.getElementById('lockedPanel').style.display = 'none';
   document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
